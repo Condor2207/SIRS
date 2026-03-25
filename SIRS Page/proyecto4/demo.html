@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 4 Demo | Automatización RPA</title>
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --sidebar: #111827;
+            --text: #111827;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --cyan: #0891b2;
+            --border: #dbeafe;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        .demo-banner { position: sticky; top: 0; z-index: 50; background: linear-gradient(90deg, #fb923c 0%, #ea580c 100%); color: #fff; text-align: center; padding: 12px 16px; font-weight: 800; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 48px); }
+        .sidebar { background: linear-gradient(180deg, #111827 0%, #1f2937 100%); color: #e5e7eb; padding: 28px 22px; }
+        .brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .sidebar p { margin: 0 0 22px; color: #93c5fd; line-height: 1.6; }
+        .nav-chip { display: block; padding: 12px 14px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.06); color: #fff; text-decoration: none; font-weight: 600; }
+        .nav-chip.active { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(147, 197, 253, 0.25); }
+        .sidebar-stats { margin-top: 26px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.08); }
+        .sidebar-stats strong { display: block; font-size: 1.8rem; margin-top: 6px; }
+        .content { padding: 24px; }
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); }
+        .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+        .hero p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 760px; }
+        .hero-actions, .toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-demo { background: var(--success); color: #fff; }
+        .btn-project { background: var(--primary); color: #fff; }
+        .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+        .metric-card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
+        .metric-card { padding: 20px; }
+        .metric-label { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+        .metric-value { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .metric-foot { color: var(--cyan); font-size: 13px; font-weight: 700; }
+        .panel-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; margin-bottom: 16px; }
+        .panel { padding: 22px; }
+        .panel h2 { margin: 0 0 6px; font-size: 1.1rem; }
+        .panel p { margin: 0 0 18px; color: var(--muted); }
+        .bar-row { display: grid; grid-template-columns: 160px 1fr 90px; gap: 12px; align-items: center; margin-bottom: 14px; }
+        .bar-track { background: #dbeafe; border-radius: 999px; height: 12px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%); }
+        .log-grid { display: grid; gap: 10px; }
+        .log-item { display: grid; grid-template-columns: 95px 1fr 120px; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--border); border-radius: 16px; background: #f8fafc; }
+        .table-wrap { overflow: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 780px; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+        th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 800; }
+        .status.ok { background: #dcfce7; color: #166534; }
+        .status.pending { background: #ffedd5; color: #9a3412; }
+        .status.alert { background: #fee2e2; color: #991b1b; }
+        .toolbar { justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .toolbar small { color: var(--muted); font-weight: 700; }
+        .toast { position: fixed; right: 20px; bottom: 20px; background: #111827; color: #fff; padding: 14px 16px; border-radius: 14px; opacity: 0; transform: translateY(20px); transition: all 0.25s ease; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 1100px) { .metrics, .panel-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+        @media (max-width: 720px) { .content { padding: 16px; } .metrics, .panel-grid { grid-template-columns: 1fr; } .bar-row, .log-item { grid-template-columns: 1fr; } .hero-actions, .toolbar { flex-direction: column; align-items: stretch; } }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">MODO DEMO - Datos de prueba</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">🤖 SIRS RPA Demo</div>
+            <p>Supervisión centralizada de bots, colas y procesos automatizados con métricas de rendimiento.</p>
+            <a class="nav-chip active" href="#overview">Resumen</a>
+            <a class="nav-chip" href="#throughput">Throughput</a>
+            <a class="nav-chip" href="#logs">Logs</a>
+            <a class="nav-chip" href="../index.html#projects">Volver al portfolio</a>
+            <div class="sidebar-stats">Entorno activo<strong id="sidebarMode">DEMO</strong><span id="lastSync">Actualización local activa</span></div>
+        </aside>
+        <main class="content">
+            <nav class="breadcrumb"><a href="../index.html">Portfolio SIRS</a><span>/</span><a href="./index.html">Proyecto 4</a><span>/</span><span>Demo</span></nav>
+            <section class="hero" id="overview">
+                <div>
+                    <h1>Centro de monitoreo RPA</h1>
+                    <p>Demo de un cockpit operativo para bots de finanzas, soporte y backoffice con indicadores de ejecuciones, ahorro estimado y seguimiento de excepciones.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="btn btn-project" href="./index.html">Ver proyecto</a>
+                    <a class="btn btn-demo" href="./demo.html?mode=demo">Ver DEMO</a>
+                    <button class="btn btn-ghost" id="exportCsv">Exportar CSV</button>
+                </div>
+            </section>
+            <section class="metrics">
+                <article class="metric-card"><div class="metric-label">Bots activos</div><div class="metric-value" data-counter="bots">0</div><div class="metric-foot">Cobertura productiva</div></article>
+                <article class="metric-card"><div class="metric-label">Procesos ejecutados</div><div class="metric-value" data-counter="runs">0</div><div class="metric-foot">Últimas 24 horas</div></article>
+                <article class="metric-card"><div class="metric-label">Ahorro estimado</div><div class="metric-value" data-counter="hours">0 h</div><div class="metric-foot">Horas liberadas</div></article>
+                <article class="metric-card"><div class="metric-label">Excepciones abiertas</div><div class="metric-value" data-counter="exceptions">0</div><div class="metric-foot">Priorización operativa</div></article>
+            </section>
+            <section class="panel-grid" id="throughput">
+                <article class="panel">
+                    <h2>Rendimiento por bot</h2>
+                    <p>Volumen diario procesado por automatización.</p>
+                    <div id="bars"></div>
+                </article>
+                <article class="panel">
+                    <h2>Eventos recientes</h2>
+                    <p>Logs resumidos para revisión rápida.</p>
+                    <div class="log-grid" id="logGrid"></div>
+                </article>
+            </section>
+            <section class="panel" id="logs">
+                <div class="toolbar"><div><h2>Detalle de ejecuciones</h2><small>Actualización automática cada 5 segundos</small></div><button class="btn btn-project" id="toggleMode">Modo DEMO activo</button></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Bot</th><th>Proceso</th><th>Última ejecución</th><th>Registros</th><th>Ahorro</th><th>Estado</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        const projectKey = 'sirs-proyecto4-mode';
+        const searchParams = new URLSearchParams(window.location.search);
+        const isDemoFromUrl = searchParams.get('mode') === 'demo';
+        if (isDemoFromUrl) localStorage.setItem(projectKey, 'demo');
+        const isDemoMode = localStorage.getItem(projectKey) === 'demo' || isDemoFromUrl || window.location.pathname.endsWith('/demo.html');
+        document.getElementById('sidebarMode').textContent = isDemoMode ? 'DEMO' : 'LIVE';
+        let dashboardData = generateDummyData();
+        let tick = 0;
+
+        function generateDummyData() {
+            return {
+                metrics: { bots: 12, runs: 4860, hours: 318, exceptions: 5 },
+                bars: [
+                    { label: 'Bot Facturas', value: 88 },
+                    { label: 'Bot Tesorería', value: 74 },
+                    { label: 'Bot RRHH', value: 63 },
+                    { label: 'Bot Soporte', value: 59 }
+                ],
+                logs: [
+                    { time: '09:12', message: 'Bot Facturas completó 420 registros', status: 'OK' },
+                    { time: '09:18', message: 'Bot RRHH detectó archivo incompleto', status: 'WARN' },
+                    { time: '09:21', message: 'Bot Tesorería reintentó lote 34', status: 'REVIEW' }
+                ],
+                rows: [
+                    { bot: 'Bot Facturas', process: 'Conciliación de pagos', lastRun: '20/03/2026 09:12', records: 420, hours: 36, status: 'Operativo' },
+                    { bot: 'Bot Tesorería', process: 'Aplicación de cobranzas', lastRun: '20/03/2026 09:18', records: 295, hours: 28, status: 'En observación' },
+                    { bot: 'Bot RRHH', process: 'Alta de legajos', lastRun: '20/03/2026 09:21', records: 188, hours: 18, status: 'Operativo' },
+                    { bot: 'Bot Soporte', process: 'Clasificación de tickets', lastRun: '20/03/2026 09:25', records: 510, hours: 41, status: 'Con excepción' },
+                    { bot: 'Bot Compras', process: 'Validación de OC', lastRun: '20/03/2026 09:28', records: 244, hours: 22, status: 'Operativo' }
+                ]
+            };
+        }
+
+        function renderDashboard(data) {
+            animateMetric('bots', data.metrics.bots, v => v.toString());
+            animateMetric('runs', data.metrics.runs, v => v.toLocaleString('es-ES'));
+            animateMetric('hours', data.metrics.hours, v => v + ' h');
+            animateMetric('exceptions', data.metrics.exceptions, v => v.toString());
+            document.getElementById('bars').innerHTML = data.bars.map(item => '<div class="bar-row"><strong>' + item.label + '</strong><div class="bar-track"><div class="bar-fill" style="width:' + item.value + '%"></div></div><span>' + item.value + '%</span></div>').join('');
+            document.getElementById('logGrid').innerHTML = data.logs.map(log => '<div class="log-item"><strong>' + log.time + '</strong><span>' + log.message + '</span><span>' + log.status + '</span></div>').join('');
+            document.getElementById('tableBody').innerHTML = data.rows.map(row => {
+                const statusClass = row.status === 'Operativo' ? 'ok' : row.status === 'En observación' ? 'pending' : 'alert';
+                return '<tr><td>' + row.bot + '</td><td>' + row.process + '</td><td>' + row.lastRun + '</td><td>' + row.records + '</td><td>' + row.hours + ' h</td><td><span class="status ' + statusClass + '">' + row.status + '</span></td></tr>';
+            }).join('');
+            document.getElementById('lastSync').textContent = 'Última simulación: ' + new Date().toLocaleTimeString('es-ES');
+        }
+
+        function animateMetric(key, endValue, formatter) {
+            const element = document.querySelector('[data-counter="' + key + '"]');
+            const startValue = Number(element.dataset.current || 0);
+            const startTime = performance.now();
+            const duration = 850;
+            function frame(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const value = Math.round(startValue + ((endValue - startValue) * progress));
+                element.textContent = formatter(value);
+                if (progress < 1) requestAnimationFrame(frame);
+                else element.dataset.current = String(endValue);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function refreshData() {
+            tick += 1;
+            dashboardData.metrics.runs += 84 + (tick * 3);
+            dashboardData.metrics.hours += 6;
+            dashboardData.metrics.exceptions = Math.max(2, dashboardData.metrics.exceptions + (tick % 2 === 0 ? -1 : 1));
+            dashboardData.bars = dashboardData.bars.map((item, index) => ({ label: item.label, value: Math.min(99, item.value + (index % 2 === 0 ? 1 : 2)) }));
+            dashboardData.logs.unshift({ time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }), message: ['Bot Compras completó lote nocturno', 'Bot Soporte recuperó cola atascada', 'Bot Tesorería procesó pagos urgentes'][tick % 3], status: ['OK', 'WARN', 'REVIEW'][tick % 3] });
+            dashboardData.logs = dashboardData.logs.slice(0, 4);
+            dashboardData.rows.unshift({ bot: ['Bot Legales', 'Bot Cobranzas', 'Bot Inventario'][tick % 3], process: ['Renovación contractual', 'Seguimiento de cobranzas', 'Actualización de stock'][tick % 3], lastRun: new Date().toLocaleString('es-ES', { hour12: false }), records: 180 + (tick * 22), hours: 14 + tick, status: ['Operativo', 'En observación', 'Con excepción'][tick % 3] });
+            dashboardData.rows = dashboardData.rows.slice(0, 6);
+            renderDashboard(dashboardData);
+        }
+
+        function exportCsv() {
+            const headers = ['Bot', 'Proceso', 'Última ejecución', 'Registros', 'Ahorro', 'Estado'];
+            const lines = dashboardData.rows.map(row => [row.bot, row.process, row.lastRun, row.records, row.hours, row.status].join(','));
+            const csv = [headers.join(','), ...lines].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'proyecto4-rpa-demo.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('CSV demo exportado correctamente');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportCsv);
+        document.getElementById('toggleMode').addEventListener('click', () => showToast('El tablero permanece en modo demo local'));
+        renderDashboard(dashboardData);
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>

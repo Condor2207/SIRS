@@ -1,0 +1,67 @@
+# INSTRUCCIONES PARA GENERAR PORTFOLIO WEB
+
+## 🎨 ESTILO Y DISEÑO REQUERIDO
+
+Crea un portfolio de desarrollador con este estilo visual:
+- **Diseño**: Minimalista, profesional, corporativo
+- **Paleta**: Fondo blanco/gris muy claro, texto oscuro, acentos en azul corporativo
+- **Tipografía**: Sans-serif moderna (Inter, Roboto o similar)
+- **Layout**: Single-page con navegación fija (sticky header)
+- **Secciones**: About → Experience → Projects → Skills → Education → Contact
+
+## 📋 SECCIONES OBLIGATORIAS
+
+### 1. HERO / HEADER
+- Nombre completo del desarrollador
+- Título profesional (ej: "Desarrollador Front-End / Full Stack")
+- Foto de perfil profesional (placeholder circular)
+- Botón "Descargar CV" y botón "Contactar"
+- Breve tagline (1-2 líneas sobre valor profesional)
+
+### 2. ABOUT ME
+- 2-3 párrafos sobre filosofía de desarrollo
+- Enfoque en: clean code, arquitectura escalable, performance
+
+### 3. EXPERIENCE (Timeline vertical)
+Para cada trabajo:
+- Fechas (Mes Año - Mes Año)
+- Cargo @ Empresa
+- 3 bullet points con logros específicos usando iconos ✓
+- Tecnologías usadas (tags pequeños)
+
+### 4. PROJECTS (Grid de tarjetas)
+Para cada proyecto:
+- Imagen/screenshot (placeholder)
+- Nombre del proyecto
+- Descripción corta (2 líneas)
+- Tecnologías usadas (iconos o tags)
+- Links: "Ver Demo" y "Ver Código" (GitHub)
+- ESTA SECCIÓN DEBE SER DESTACADA Y VISUAL
+
+### 5. SKILLS
+- Categorías: Frontend, Backend, DevOps, Tools
+- Mostrar como grid de iconos con nombres
+- Incluir: React, Next.js, TypeScript, Tailwind, Node.js, etc.
+
+### 6. EDUCATION & CERTIFICATIONS
+- Iconos distintivos para cada tipo (universidad, bootcamp, certificación)
+- Institución, título, año
+
+### 7. CONTACT / FOOTER
+- Email
+- Links a LinkedIn y GitHub (iconos)
+- Formulario de contacto simple (opcional)
+
+## ⚙️ REQUISITOS TÉCNICOS
+
+- **HTML5 semántico** con buena accesibilidad (ARIA labels)
+- **CSS moderno**: Flexbox/Grid, variables CSS para colores
+- **Responsive**: Mobile-first, debe verse bien en todos los dispositivos
+- **Performance**: Imágenes optimizadas, lazy loading
+- **SEO básico**: Meta tags, Open Graph, favicon
+- **Sin frameworks**: Vanilla HTML/CSS/JS (o React si se prefiere)
+- **Código limpio**: Comentado, bien estructurado, fácil de editar
+
+## 📝 DATOS PERSONALIZABLES (PLACEHOLDERS)
+
+Usa estos placeholders que yo reemplazaré después:

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 5 Demo | Power BI Embed Simulado</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --surface: #ffffff;
+            --sidebar: #1e1b4b;
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --violet: #7c3aed;
+            --border: #c7d2fe;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        .demo-banner { position: sticky; top: 0; z-index: 50; background: linear-gradient(90deg, #fb923c 0%, #ea580c 100%); color: #fff; text-align: center; padding: 12px 16px; font-weight: 800; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 48px); }
+        .sidebar { background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%); color: #e0e7ff; padding: 28px 22px; }
+        .brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .sidebar p { margin: 0 0 22px; color: #c7d2fe; line-height: 1.6; }
+        .nav-chip { display: block; padding: 12px 14px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.06); color: #fff; text-decoration: none; font-weight: 600; }
+        .nav-chip.active { background: rgba(124, 58, 237, 0.22); border: 1px solid rgba(199, 210, 254, 0.22); }
+        .sidebar-stats { margin-top: 26px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.08); }
+        .sidebar-stats strong { display: block; font-size: 1.8rem; margin-top: 6px; }
+        .content { padding: 24px; }
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; background: linear-gradient(135deg, #ffffff 0%, #eef2ff 100%); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); }
+        .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+        .hero p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 760px; }
+        .hero-actions, .toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-demo { background: var(--success); color: #fff; }
+        .btn-project { background: var(--primary); color: #fff; }
+        .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+        .metric-card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
+        .metric-card { padding: 20px; }
+        .metric-label { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+        .metric-value { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .metric-foot { color: var(--violet); font-size: 13px; font-weight: 700; }
+        .panel-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; margin-bottom: 16px; }
+        .panel { padding: 22px; }
+        .panel h2 { margin: 0 0 6px; font-size: 1.1rem; }
+        .panel p { margin: 0 0 18px; color: var(--muted); }
+        .embed-frame { border: 1px solid var(--border); border-radius: 20px; overflow: hidden; background: #f8fafc; }
+        .embed-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: #e0e7ff; font-weight: 800; color: #312e81; }
+        .embed-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 16px; }
+        .embed-tile { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 16px; min-height: 140px; }
+        .embed-tile strong { display: block; margin-bottom: 10px; }
+        .sparkline { display: flex; align-items: end; gap: 8px; height: 80px; }
+        .sparkline span { display: block; flex: 1; border-radius: 999px 999px 0 0; background: linear-gradient(180deg, #7c3aed 0%, #2563eb 100%); }
+        .legend-list { display: grid; gap: 10px; }
+        .legend-item { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        .legend-item i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .table-wrap { overflow: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 780px; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+        th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 800; }
+        .status.ok { background: #dcfce7; color: #166534; }
+        .status.pending { background: #ffedd5; color: #9a3412; }
+        .status.alert { background: #dbeafe; color: #1d4ed8; }
+        .toolbar { justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .toolbar small { color: var(--muted); font-weight: 700; }
+        .toast { position: fixed; right: 20px; bottom: 20px; background: #111827; color: #fff; padding: 14px 16px; border-radius: 14px; opacity: 0; transform: translateY(20px); transition: all 0.25s ease; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 1100px) { .metrics, .panel-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+        @media (max-width: 720px) { .content { padding: 16px; } .metrics, .panel-grid, .embed-grid { grid-template-columns: 1fr; } .hero-actions, .toolbar { flex-direction: column; align-items: stretch; } }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">MODO DEMO - Datos de prueba</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">📊 SIRS BI Demo</div>
+            <p>Simulación de una experiencia Power BI embebida para directorio y áreas gerenciales.</p>
+            <a class="nav-chip active" href="#overview">Resumen</a>
+            <a class="nav-chip" href="#embed">Reporte embebido</a>
+            <a class="nav-chip" href="#table">Detalle de unidades</a>
+            <a class="nav-chip" href="../index.html#projects">Volver al portfolio</a>
+            <div class="sidebar-stats">Entorno activo<strong id="sidebarMode">DEMO</strong><span id="lastSync">Actualización local activa</span></div>
+        </aside>
+        <main class="content">
+            <nav class="breadcrumb"><a href="../index.html">Portfolio SIRS</a><span>/</span><a href="./index.html">Proyecto 5</a><span>/</span><span>Demo</span></nav>
+            <section class="hero" id="overview">
+                <div>
+                    <h1>Power BI Embed simulado</h1>
+                    <p>Demo local de un portal analítico con KPIs, gráficos internos y una superficie visual que emula la experiencia de un reporte embebido empresarial.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="btn btn-project" href="./index.html">Ver proyecto</a>
+                    <a class="btn btn-demo" href="./demo.html?mode=demo">Ver DEMO</a>
+                    <button class="btn btn-ghost" id="exportCsv">Exportar CSV</button>
+                </div>
+            </section>
+            <section class="metrics">
+                <article class="metric-card"><div class="metric-label">Usuarios activos</div><div class="metric-value" data-counter="users">0</div><div class="metric-foot">Consumo del reporte</div></article>
+                <article class="metric-card"><div class="metric-label">Ingresos consolidados</div><div class="metric-value" data-counter="revenue">USD 0</div><div class="metric-foot">Corte ejecutivo</div></article>
+                <article class="metric-card"><div class="metric-label">Margen promedio</div><div class="metric-value" data-counter="margin">0%</div><div class="metric-foot">Comparativo mensual</div></article>
+                <article class="metric-card"><div class="metric-label">Alertas gerenciales</div><div class="metric-value" data-counter="alerts">0</div><div class="metric-foot">Observaciones pendientes</div></article>
+            </section>
+            <section class="panel-grid" id="embed">
+                <article class="panel">
+                    <h2>Superficie de reporte embebido</h2>
+                    <p>Simulación visual de tiles analíticos dentro de un contenedor tipo embed.</p>
+                    <div class="embed-frame">
+                        <div class="embed-header"><span>Power BI Embed Simulation</span><span id="embedRefresh">Actualizado ahora</span></div>
+                        <div class="embed-grid">
+                            <div class="embed-tile">
+                                <strong>Ingresos por trimestre</strong>
+                                <div class="sparkline" id="sparkRevenue"></div>
+                            </div>
+                            <div class="embed-tile">
+                                <strong>Adopción por unidad</strong>
+                                <div class="legend-list" id="adoptionLegend"></div>
+                            </div>
+                            <div class="embed-tile">
+                                <strong>KPIs operativos</strong>
+                                <div class="legend-list" id="kpiList"></div>
+                            </div>
+                            <div class="embed-tile">
+                                <strong>Resumen ejecutivo</strong>
+                                <p id="summaryText">Cargando resumen demo...</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="panel">
+                    <h2>Distribución regional</h2>
+                    <p>Participación por unidad analizada.</p>
+                    <div class="legend-list" id="regionList"></div>
+                </article>
+            </section>
+            <section class="panel" id="table">
+                <div class="toolbar"><div><h2>Detalle por unidad</h2><small>Actualización automática cada 5 segundos</small></div><button class="btn btn-project" id="toggleMode">Modo DEMO activo</button></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Unidad</th><th>Manager</th><th>Ingresos</th><th>Margen</th><th>Adopción</th><th>Estado</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        const projectKey = 'sirs-proyecto5-mode';
+        const searchParams = new URLSearchParams(window.location.search);
+        const isDemoFromUrl = searchParams.get('mode') === 'demo';
+        if (isDemoFromUrl) localStorage.setItem(projectKey, 'demo');
+        const isDemoMode = localStorage.getItem(projectKey) === 'demo' || isDemoFromUrl || window.location.pathname.endsWith('/demo.html');
+        document.getElementById('sidebarMode').textContent = isDemoMode ? 'DEMO' : 'LIVE';
+        let dashboardData = generateDummyData();
+        let tick = 0;
+
+        function generateDummyData() {
+            return {
+                metrics: { users: 284, revenue: 3480000, margin: 27, alerts: 4 },
+                revenueSeries: [42, 58, 66, 81, 74, 92],
+                adoption: [
+                    { label: 'Finanzas', value: '92%', color: '#7c3aed' },
+                    { label: 'Operaciones', value: '84%', color: '#2563eb' },
+                    { label: 'Comercial', value: '78%', color: '#16a34a' }
+                ],
+                kpis: [
+                    { label: 'Refresh promedio', value: '4.2 min' },
+                    { label: 'Sesiones activas', value: '68' },
+                    { label: 'Favoritos guardados', value: '143' }
+                ],
+                regions: [
+                    { label: 'Norte', value: '31%', color: '#7c3aed' },
+                    { label: 'Centro', value: '44%', color: '#2563eb' },
+                    { label: 'Sur', value: '25%', color: '#16a34a' }
+                ],
+                rows: [
+                    { unit: 'Finanzas Corporativas', manager: 'Laura Medina', revenue: 920000, margin: '31%', adoption: '92%', status: 'Saludable' },
+                    { unit: 'Operaciones Regionales', manager: 'Sebastián Correa', revenue: 780000, margin: '24%', adoption: '84%', status: 'En seguimiento' },
+                    { unit: 'Ventas Enterprise', manager: 'Mónica Herrera', revenue: 1040000, margin: '28%', adoption: '78%', status: 'Saludable' },
+                    { unit: 'Supply Chain', manager: 'Rodrigo Pavez', revenue: 740000, margin: '22%', adoption: '69%', status: 'Atención' }
+                ],
+                summary: 'El reporte muestra crecimiento sostenido en adopción interna, con foco en operaciones y ventas para el próximo corte semanal.'
+            };
+        }
+
+        function renderDashboard(data) {
+            animateMetric('users', data.metrics.users, v => v.toString());
+            animateMetric('revenue', data.metrics.revenue, v => formatCurrency(v));
+            animateMetric('margin', data.metrics.margin, v => v + '%');
+            animateMetric('alerts', data.metrics.alerts, v => v.toString());
+            document.getElementById('sparkRevenue').innerHTML = data.revenueSeries.map(value => '<span style="height:' + value + '%"></span>').join('');
+            document.getElementById('adoptionLegend').innerHTML = data.adoption.map(item => '<div class="legend-item"><span><i style="background:' + item.color + '"></i>' + item.label + '</span><strong>' + item.value + '</strong></div>').join('');
+            document.getElementById('kpiList').innerHTML = data.kpis.map(item => '<div class="legend-item"><span>' + item.label + '</span><strong>' + item.value + '</strong></div>').join('');
+            document.getElementById('regionList').innerHTML = data.regions.map(item => '<div class="legend-item"><span><i style="background:' + item.color + '"></i>' + item.label + '</span><strong>' + item.value + '</strong></div>').join('');
+            document.getElementById('summaryText').textContent = data.summary;
+            document.getElementById('tableBody').innerHTML = data.rows.map(row => {
+                const statusClass = row.status === 'Saludable' ? 'ok' : row.status === 'En seguimiento' ? 'pending' : 'alert';
+                return '<tr><td>' + row.unit + '</td><td>' + row.manager + '</td><td>' + formatCurrency(row.revenue) + '</td><td>' + row.margin + '</td><td>' + row.adoption + '</td><td><span class="status ' + statusClass + '">' + row.status + '</span></td></tr>';
+            }).join('');
+            document.getElementById('embedRefresh').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-ES');
+            document.getElementById('lastSync').textContent = 'Última simulación: ' + new Date().toLocaleTimeString('es-ES');
+        }
+
+        function animateMetric(key, endValue, formatter) {
+            const element = document.querySelector('[data-counter="' + key + '"]');
+            const startValue = Number(element.dataset.current || 0);
+            const startTime = performance.now();
+            const duration = 850;
+            function frame(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const value = Math.round(startValue + ((endValue - startValue) * progress));
+                element.textContent = formatter(value);
+                if (progress < 1) requestAnimationFrame(frame);
+                else element.dataset.current = String(endValue);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function refreshData() {
+            tick += 1;
+            dashboardData.metrics.users += 6;
+            dashboardData.metrics.revenue += 120000 + (tick * 25000);
+            dashboardData.metrics.margin = Math.min(34, dashboardData.metrics.margin + (tick % 2));
+            dashboardData.metrics.alerts = Math.max(2, dashboardData.metrics.alerts + (tick % 2 === 0 ? -1 : 1));
+            dashboardData.revenueSeries = dashboardData.revenueSeries.map((value, index) => Math.min(98, value + ((index + tick) % 3)));
+            dashboardData.rows.unshift({ unit: ['Canal Partners', 'Customer Success', 'Servicios Gestionados'][tick % 3], manager: ['Alicia Márquez', 'Pablo Rosales', 'Gabriela Nieto'][tick % 3], revenue: 560000 + (tick * 68000), margin: (23 + tick) + '%', adoption: (72 + tick) + '%', status: ['En seguimiento', 'Saludable', 'Atención'][tick % 3] });
+            dashboardData.rows = dashboardData.rows.slice(0, 5);
+            dashboardData.summary = 'Se detecta mayor tracción en unidades con adopción superior al 80%, mientras las alertas se mantienen controladas en el entorno demo.';
+            renderDashboard(dashboardData);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+        }
+
+        function exportCsv() {
+            const headers = ['Unidad', 'Manager', 'Ingresos', 'Margen', 'Adopción', 'Estado'];
+            const lines = dashboardData.rows.map(row => [row.unit, row.manager, row.revenue, row.margin, row.adoption, row.status].join(','));
+            const csv = [headers.join(','), ...lines].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'proyecto5-powerbi-demo.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('CSV demo exportado correctamente');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportCsv);
+        document.getElementById('toggleMode').addEventListener('click', () => showToast('El tablero permanece en modo demo local'));
+        renderDashboard(dashboardData);
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>

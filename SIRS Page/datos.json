@@ -1,0 +1,168 @@
+{
+  "empresa": {
+    "nombre": "SIRS",
+    "descripcion": "Soluciones tecnológicas empresariales"
+  },
+  "contacto": {
+    "email": "[EMAIL]",
+    "telefono": "[TELEFONO]",
+    "linkedin": "[LINKEDIN_URL]",
+    "github": "[GITHUB_URL]",
+    "twitter": "[TWITTER_URL]",
+    "descripcion": "[DESCRIPCION_CONTACTO]"
+  },
+  "hero": {
+    "nombre_completo": "[NOMBRE_COMPLETO]",
+    "titulo_profesional": "[TITULO_PROFESIONAL]",
+    "tagline": "[TAGLINE_BREVE]"
+  },
+  "about": {
+    "parrafo_1": "[PARRAFO_SOBRE_NOSOTROS_1]",
+    "parrafo_2": "[PARRAFO_SOBRE_NOSOTROS_2]",
+    "parrafo_3": "[PARRAFO_SOBRE_NOSOTROS_3]"
+  },
+  "experiencia": [
+    {
+      "fechaInicio": "[FECHA_INICIO]",
+      "fechaFin": "[FECHA_FIN]",
+      "cargo": "[CARGO]",
+      "empresa": "[EMPRESA]",
+      "logros": [
+        "[LOGRO_1]",
+        "[LOGRO_2]",
+        "[LOGRO_3]"
+      ],
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ]
+    },
+    {
+      "fechaInicio": "[FECHA_INICIO]",
+      "fechaFin": "[FECHA_FIN]",
+      "cargo": "[CARGO]",
+      "empresa": "[EMPRESA]",
+      "logros": [
+        "[LOGRO_1]",
+        "[LOGRO_2]",
+        "[LOGRO_3]"
+      ],
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ]
+    },
+    {
+      "fechaInicio": "[FECHA_INICIO]",
+      "fechaFin": "[FECHA_FIN]",
+      "cargo": "[CARGO]",
+      "empresa": "[EMPRESA]",
+      "logros": [
+        "[LOGRO_1]",
+        "[LOGRO_2]",
+        "[LOGRO_3]"
+      ],
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ]
+    }
+  ],
+  "proyectos": [
+    {
+      "nombre": "[NOMBRE_PROYECTO_1]",
+      "descripcion": "[DESCRIPCION_PROYECTO_1]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    },
+    {
+      "nombre": "[NOMBRE_PROYECTO_2]",
+      "descripcion": "[DESCRIPCION_PROYECTO_2]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    },
+    {
+      "nombre": "[NOMBRE_PROYECTO_3]",
+      "descripcion": "[DESCRIPCION_PROYECTO_3]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    },
+    {
+      "nombre": "[NOMBRE_PROYECTO_4]",
+      "descripcion": "[DESCRIPCION_PROYECTO_4]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    },
+    {
+      "nombre": "[NOMBRE_PROYECTO_5]",
+      "descripcion": "[DESCRIPCION_PROYECTO_5]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    },
+    {
+      "nombre": "[NOMBRE_PROYECTO_6]",
+      "descripcion": "[DESCRIPCION_PROYECTO_6]",
+      "tecnologias": [
+        "[TECH_1]",
+        "[TECH_2]",
+        "[TECH_3]"
+      ],
+      "link_demo": "[URL_DEMO]",
+      "link_github": "[URL_GITHUB]"
+    }
+  ],
+  "educacion": [
+    {
+      "titulo": "[TITULO_EDUCACION_1]",
+      "institucion": "[INSTITUCION_1]",
+      "ano": "[AÑO_1]",
+      "icono": "🎓"
+    },
+    {
+      "titulo": "[TITULO_EDUCACION_2]",
+      "institucion": "[INSTITUCION_2]",
+      "ano": "[AÑO_2]",
+      "icono": "📜"
+    },
+    {
+      "titulo": "[TITULO_EDUCACION_3]",
+      "institucion": "[INSTITUCION_3]",
+      "ano": "[AÑO_3]",
+      "icono": "🏆"
+    },
+    {
+      "titulo": "[TITULO_EDUCACION_4]",
+      "institucion": "[INSTITUCION_4]",
+      "ano": "[AÑO_4]",
+      "icono": "📚"
+    }
+  ]
+}

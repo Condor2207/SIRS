@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 2 Demo | ERP Constructora Uruguay</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --sidebar: #0f172a;
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --teal: #0f766e;
+            --border: #e2e8f0;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        .demo-banner { position: sticky; top: 0; z-index: 50; background: linear-gradient(90deg, #fb923c 0%, #ea580c 100%); color: #fff; text-align: center; padding: 12px 16px; font-weight: 800; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 48px); }
+        .sidebar { background: linear-gradient(180deg, #042f2e 0%, #134e4a 100%); color: #ccfbf1; padding: 28px 22px; }
+        .brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .sidebar p { margin: 0 0 22px; color: #99f6e4; line-height: 1.6; }
+        .nav-chip { display: block; padding: 12px 14px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.08); color: #f0fdfa; text-decoration: none; font-weight: 600; }
+        .nav-chip.active { background: rgba(45, 212, 191, 0.18); border: 1px solid rgba(153, 246, 228, 0.24); }
+        .sidebar-stats { margin-top: 26px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.08); }
+        .sidebar-stats strong { display: block; font-size: 1.8rem; margin-top: 6px; }
+        .content { padding: 24px; }
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; background: linear-gradient(135deg, #ffffff 0%, #ecfeff 100%); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); }
+        .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+        .hero p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 760px; }
+        .hero-actions, .toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-demo { background: var(--success); color: #fff; }
+        .btn-project { background: var(--primary); color: #fff; }
+        .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+        .metric-card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
+        .metric-card { padding: 20px; }
+        .metric-label { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+        .metric-value { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .metric-foot { color: var(--teal); font-size: 13px; font-weight: 700; }
+        .panel-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; margin-bottom: 16px; }
+        .panel { padding: 22px; }
+        .panel h2 { margin: 0 0 6px; font-size: 1.1rem; }
+        .panel p { margin: 0 0 18px; color: var(--muted); }
+        .bar-row { display: grid; grid-template-columns: 160px 1fr 90px; gap: 12px; align-items: center; margin-bottom: 14px; }
+        .bar-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #0f766e 0%, #2dd4bf 100%); }
+        .funnel { display: grid; gap: 12px; }
+        .funnel-step { background: #f8fafc; border-radius: 18px; padding: 14px 16px; border: 1px solid var(--border); font-weight: 700; }
+        .table-wrap { overflow: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 780px; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+        th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 800; }
+        .status.ok { background: #dcfce7; color: #166534; }
+        .status.pending { background: #ffedd5; color: #9a3412; }
+        .status.alert { background: #fee2e2; color: #991b1b; }
+        .toolbar { justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .toolbar small { color: var(--muted); font-weight: 700; }
+        .toast { position: fixed; right: 20px; bottom: 20px; background: #0f172a; color: #fff; padding: 14px 16px; border-radius: 14px; opacity: 0; transform: translateY(20px); transition: all 0.25s ease; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 1100px) { .metrics, .panel-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+        @media (max-width: 720px) { .content { padding: 16px; } .metrics, .panel-grid { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 1fr; } .hero-actions, .toolbar { flex-direction: column; align-items: stretch; } }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">MODO DEMO - Datos de prueba</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">🏗️ SIRS ERP Demo</div>
+            <p>Control de obras, certificaciones y presupuesto para una constructora con operaciones en Uruguay.</p>
+            <a class="nav-chip active" href="#overview">Resumen</a>
+            <a class="nav-chip" href="#progress">Avance por obra</a>
+            <a class="nav-chip" href="#table">Portafolio de obras</a>
+            <a class="nav-chip" href="../index.html#projects">Volver al portfolio</a>
+            <div class="sidebar-stats">Estado del entorno<strong id="sidebarMode">DEMO</strong><span id="lastSync">Actualización local activa</span></div>
+        </aside>
+        <main class="content">
+            <nav class="breadcrumb"><a href="../index.html">Portfolio SIRS</a><span>/</span><a href="./index.html">Proyecto 2</a><span>/</span><span>Demo</span></nav>
+            <section class="hero" id="overview">
+                <div>
+                    <h1>ERP de seguimiento de obras</h1>
+                    <p>Panel demo para directores de obra y gerencia. Consolida avance físico, ejecución presupuestaria, desvíos y contratistas en una sola vista.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="btn btn-project" href="./index.html">Ver proyecto</a>
+                    <a class="btn btn-demo" href="./demo.html?mode=demo">Ver DEMO</a>
+                    <button class="btn btn-ghost" id="exportCsv">Exportar CSV</button>
+                </div>
+            </section>
+            <section class="metrics">
+                <article class="metric-card"><div class="metric-label">Obras activas</div><div class="metric-value" data-counter="projects">0</div><div class="metric-foot">Pipeline estable</div></article>
+                <article class="metric-card"><div class="metric-label">Presupuesto ejecutado</div><div class="metric-value" data-counter="budget">UYU 0</div><div class="metric-foot">Corte al cierre de hoy</div></article>
+                <article class="metric-card"><div class="metric-label">Avance promedio</div><div class="metric-value" data-counter="progress">0%</div><div class="metric-foot">Frentes críticos bajo control</div></article>
+                <article class="metric-card"><div class="metric-label">Desvíos abiertos</div><div class="metric-value" data-counter="deviations">0</div><div class="metric-foot">Seguimiento semanal</div></article>
+            </section>
+            <section class="panel-grid" id="progress">
+                <article class="panel">
+                    <h2>Avance por obra</h2>
+                    <p>Comparativo porcentual de ejecución física frente a plan.</p>
+                    <div id="bars"></div>
+                </article>
+                <article class="panel">
+                    <h2>Embudo de entregables</h2>
+                    <p>Estado actual de aprobaciones e hitos contractuales.</p>
+                    <div class="funnel" id="funnel"></div>
+                </article>
+            </section>
+            <section class="panel" id="table">
+                <div class="toolbar"><div><h2>Portafolio de obras</h2><small>Actualización automática cada 5 segundos</small></div><button class="btn btn-project" id="toggleMode">Modo DEMO activo</button></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Obra</th><th>Responsable</th><th>Ubicación</th><th>Avance</th><th>Presupuesto</th><th>Estado</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        const projectKey = 'sirs-proyecto2-mode';
+        const searchParams = new URLSearchParams(window.location.search);
+        const isDemoFromUrl = searchParams.get('mode') === 'demo';
+        if (isDemoFromUrl) localStorage.setItem(projectKey, 'demo');
+        const isDemoMode = localStorage.getItem(projectKey) === 'demo' || isDemoFromUrl || window.location.pathname.endsWith('/demo.html');
+        document.getElementById('sidebarMode').textContent = isDemoMode ? 'DEMO' : 'LIVE';
+        let dashboardData = generateDummyData();
+        let tick = 0;
+
+        function generateDummyData() {
+            return {
+                metrics: { projects: 14, budget: 185400000, progress: 71, deviations: 3 },
+                bars: [
+                    { label: 'Torre Malvín', value: 84 },
+                    { label: 'Centro Logístico Canelones', value: 77 },
+                    { label: 'Parque Industrial Paysandú', value: 69 },
+                    { label: 'Edificio Rambla Sur', value: 61 },
+                    { label: 'Complejo Atlántida', value: 58 }
+                ],
+                funnel: [
+                    { label: 'Obras en ejecución', value: 14 },
+                    { label: 'Hitos certificados', value: 11 },
+                    { label: 'Compras aprobadas', value: 9 },
+                    { label: 'Cierres pendientes', value: 4 }
+                ],
+                rows: [
+                    { project: 'Torre Malvín', manager: 'Agustina Pereira', location: 'Montevideo', progress: '84%', budget: 38400000, status: 'En plazo' },
+                    { project: 'Centro Logístico Canelones', manager: 'Mateo Sosa', location: 'Canelones', progress: '77%', budget: 51200000, status: 'En revisión' },
+                    { project: 'Parque Industrial Paysandú', manager: 'Valentina Techera', location: 'Paysandú', progress: '69%', budget: 24800000, status: 'En plazo' },
+                    { project: 'Edificio Rambla Sur', manager: 'Santiago Bentancur', location: 'Montevideo', progress: '61%', budget: 39600000, status: 'Con desvío' },
+                    { project: 'Complejo Atlántida', manager: 'Lucía Cabrera', location: 'Canelones', progress: '58%', budget: 31400000, status: 'En revisión' }
+                ]
+            };
+        }
+
+        function renderDashboard(data) {
+            animateMetric('projects', data.metrics.projects, v => v.toString());
+            animateMetric('budget', data.metrics.budget, v => formatCurrency(v));
+            animateMetric('progress', data.metrics.progress, v => v + '%');
+            animateMetric('deviations', data.metrics.deviations, v => v.toString());
+            document.getElementById('bars').innerHTML = data.bars.map(item => '<div class="bar-row"><strong>' + item.label + '</strong><div class="bar-track"><div class="bar-fill" style="width:' + item.value + '%"></div></div><span>' + item.value + '%</span></div>').join('');
+            document.getElementById('funnel').innerHTML = data.funnel.map((item, index) => '<div class="funnel-step" style="width:' + (100 - (index * 10)) + '%">' + item.label + ': <strong>' + item.value + '</strong></div>').join('');
+            document.getElementById('tableBody').innerHTML = data.rows.map(row => {
+                const statusClass = row.status === 'En plazo' ? 'ok' : row.status === 'En revisión' ? 'pending' : 'alert';
+                return '<tr><td>' + row.project + '</td><td>' + row.manager + '</td><td>' + row.location + '</td><td>' + row.progress + '</td><td>' + formatCurrency(row.budget) + '</td><td><span class="status ' + statusClass + '">' + row.status + '</span></td></tr>';
+            }).join('');
+            document.getElementById('lastSync').textContent = 'Última simulación: ' + new Date().toLocaleTimeString('es-UY');
+        }
+
+        function animateMetric(key, endValue, formatter) {
+            const element = document.querySelector('[data-counter="' + key + '"]');
+            const startValue = Number(element.dataset.current || 0);
+            const startTime = performance.now();
+            const duration = 850;
+            function frame(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const value = Math.round(startValue + ((endValue - startValue) * progress));
+                element.textContent = formatter(value);
+                if (progress < 1) requestAnimationFrame(frame);
+                else element.dataset.current = String(endValue);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function refreshData() {
+            tick += 1;
+            dashboardData.metrics.budget += 1800000 + (tick * 350000);
+            dashboardData.metrics.progress = Math.min(95, dashboardData.metrics.progress + 1);
+            dashboardData.metrics.deviations = Math.max(1, dashboardData.metrics.deviations + (tick % 2 === 0 ? -1 : 1));
+            dashboardData.bars = dashboardData.bars.map((item, index) => ({ label: item.label, value: Math.min(96, item.value + (index % 2 === 0 ? 1 : 2)) }));
+            dashboardData.rows.unshift({
+                project: ['Bypass Colonia', 'Planta Frigorífica Florida', 'Terminal Rivera'][tick % 3],
+                manager: ['Emilia Viera', 'Ignacio Nogueira', 'Martina Perdomo'][tick % 3],
+                location: ['Colonia', 'Florida', 'Rivera'][tick % 3],
+                progress: (62 + tick) + '%',
+                budget: 21500000 + (tick * 1400000),
+                status: ['En plazo', 'En revisión', 'Con desvío'][tick % 3]
+            });
+            dashboardData.rows = dashboardData.rows.slice(0, 6);
+            renderDashboard(dashboardData);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-UY', { style: 'currency', currency: 'UYU', maximumFractionDigits: 0 }).format(value);
+        }
+
+        function exportCsv() {
+            const headers = ['Obra', 'Responsable', 'Ubicación', 'Avance', 'Presupuesto', 'Estado'];
+            const lines = dashboardData.rows.map(row => [row.project, row.manager, row.location, row.progress, row.budget, row.status].join(','));
+            const csv = [headers.join(','), ...lines].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'proyecto2-obras-demo.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('CSV demo exportado correctamente');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportCsv);
+        document.getElementById('toggleMode').addEventListener('click', () => showToast('El tablero permanece en modo demo local'));
+        renderDashboard(dashboardData);
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 3 Demo | CRM Ventas México</title>
+    <style>
+        :root {
+            --bg: #fffaf3;
+            --surface: #ffffff;
+            --sidebar: #7c2d12;
+            --text: #111827;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --amber: #d97706;
+            --border: #fed7aa;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        .demo-banner { position: sticky; top: 0; z-index: 50; background: linear-gradient(90deg, #fb923c 0%, #ea580c 100%); color: #fff; text-align: center; padding: 12px 16px; font-weight: 800; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 48px); }
+        .sidebar { background: linear-gradient(180deg, #7c2d12 0%, #9a3412 100%); color: #ffedd5; padding: 28px 22px; }
+        .brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .sidebar p { margin: 0 0 22px; color: #fdba74; line-height: 1.6; }
+        .nav-chip { display: block; padding: 12px 14px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.08); color: #fff7ed; text-decoration: none; font-weight: 600; }
+        .nav-chip.active { background: rgba(251, 146, 60, 0.2); border: 1px solid rgba(254, 215, 170, 0.28); }
+        .sidebar-stats { margin-top: 26px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.08); }
+        .sidebar-stats strong { display: block; font-size: 1.8rem; margin-top: 6px; }
+        .content { padding: 24px; }
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); }
+        .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+        .hero p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 760px; }
+        .hero-actions, .toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-demo { background: var(--success); color: #fff; }
+        .btn-project { background: var(--primary); color: #fff; }
+        .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+        .metric-card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
+        .metric-card { padding: 20px; }
+        .metric-label { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+        .metric-value { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .metric-foot { color: var(--amber); font-size: 13px; font-weight: 700; }
+        .panel-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 16px; margin-bottom: 16px; }
+        .panel { padding: 22px; }
+        .panel h2 { margin: 0 0 6px; font-size: 1.1rem; }
+        .panel p { margin: 0 0 18px; color: var(--muted); }
+        .bar-row { display: grid; grid-template-columns: 140px 1fr 90px; gap: 12px; align-items: center; margin-bottom: 14px; }
+        .bar-track { background: #ffedd5; border-radius: 999px; height: 12px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f97316 0%, #fb7185 100%); }
+        .funnel { display: grid; gap: 12px; }
+        .funnel-step { border-radius: 16px; padding: 14px 16px; color: #fff; font-weight: 800; }
+        .table-wrap { overflow: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 780px; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+        th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 800; }
+        .status.ok { background: #dcfce7; color: #166534; }
+        .status.pending { background: #ffedd5; color: #9a3412; }
+        .status.alert { background: #dbeafe; color: #1d4ed8; }
+        .toolbar { justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .toolbar small { color: var(--muted); font-weight: 700; }
+        .toast { position: fixed; right: 20px; bottom: 20px; background: #111827; color: #fff; padding: 14px 16px; border-radius: 14px; opacity: 0; transform: translateY(20px); transition: all 0.25s ease; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 1100px) { .metrics, .panel-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+        @media (max-width: 720px) { .content { padding: 16px; } .metrics, .panel-grid { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 1fr; } .hero-actions, .toolbar { flex-direction: column; align-items: stretch; } }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">MODO DEMO - Datos de prueba</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">📈 SIRS CRM Demo</div>
+            <p>Seguimiento de oportunidades, ejecutivos y forecast comercial para equipos de ventas en México.</p>
+            <a class="nav-chip active" href="#overview">Resumen</a>
+            <a class="nav-chip" href="#funnel">Embudo</a>
+            <a class="nav-chip" href="#table">Leads activos</a>
+            <a class="nav-chip" href="../index.html#projects">Volver al portfolio</a>
+            <div class="sidebar-stats">Entorno activo<strong id="sidebarMode">DEMO</strong><span id="lastSync">Actualización local activa</span></div>
+        </aside>
+        <main class="content">
+            <nav class="breadcrumb"><a href="../index.html">Portfolio SIRS</a><span>/</span><a href="./index.html">Proyecto 3</a><span>/</span><span>Demo</span></nav>
+            <section class="hero" id="overview">
+                <div>
+                    <h1>CRM de ventas y forecast</h1>
+                    <p>Dashboard demo para dirección comercial con monitoreo de leads, valor pipeline, etapas del funnel y seguimiento de ejecutivos.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="btn btn-project" href="./index.html">Ver proyecto</a>
+                    <a class="btn btn-demo" href="./demo.html?mode=demo">Ver DEMO</a>
+                    <button class="btn btn-ghost" id="exportCsv">Exportar CSV</button>
+                </div>
+            </section>
+            <section class="metrics">
+                <article class="metric-card"><div class="metric-label">Leads activos</div><div class="metric-value" data-counter="leads">0</div><div class="metric-foot">Entrada diaria estable</div></article>
+                <article class="metric-card"><div class="metric-label">Pipeline estimado</div><div class="metric-value" data-counter="pipeline">MXN 0</div><div class="metric-foot">Forecast del mes</div></article>
+                <article class="metric-card"><div class="metric-label">Tasa de cierre</div><div class="metric-value" data-counter="closeRate">0%</div><div class="metric-foot">Conversión acumulada</div></article>
+                <article class="metric-card"><div class="metric-label">Demos agendadas</div><div class="metric-value" data-counter="demos">0</div><div class="metric-foot">Agenda comercial</div></article>
+            </section>
+            <section class="panel-grid" id="funnel">
+                <article class="panel">
+                    <h2>Pipeline por ejecutivo</h2>
+                    <p>Valor estimado por asesor comercial.</p>
+                    <div id="bars"></div>
+                </article>
+                <article class="panel">
+                    <h2>Embudo comercial</h2>
+                    <p>Etapas y volumen actual del funnel.</p>
+                    <div class="funnel" id="funnelSteps"></div>
+                </article>
+            </section>
+            <section class="panel" id="table">
+                <div class="toolbar"><div><h2>Leads monitoreados</h2><small>Actualización automática cada 5 segundos</small></div><button class="btn btn-project" id="toggleMode">Modo DEMO activo</button></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Lead</th><th>Empresa</th><th>Ejecutivo</th><th>Etapa</th><th>Valor estimado</th><th>Estado</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        const projectKey = 'sirs-proyecto3-mode';
+        const searchParams = new URLSearchParams(window.location.search);
+        const isDemoFromUrl = searchParams.get('mode') === 'demo';
+        if (isDemoFromUrl) localStorage.setItem(projectKey, 'demo');
+        const isDemoMode = localStorage.getItem(projectKey) === 'demo' || isDemoFromUrl || window.location.pathname.endsWith('/demo.html');
+        document.getElementById('sidebarMode').textContent = isDemoMode ? 'DEMO' : 'LIVE';
+        let dashboardData = generateDummyData();
+        let tick = 0;
+
+        function generateDummyData() {
+            return {
+                metrics: { leads: 126, pipeline: 9480000, closeRate: 31, demos: 18 },
+                bars: [
+                    { label: 'Fernanda Soto', value: 92 },
+                    { label: 'Diego Villalobos', value: 76 },
+                    { label: 'Regina Cárdenas', value: 68 },
+                    { label: 'Javier Méndez', value: 61 }
+                ],
+                funnel: [
+                    { label: 'Leads nuevos', value: 126, color: '#f97316' },
+                    { label: 'Calificados', value: 79, color: '#fb7185' },
+                    { label: 'Demo agendada', value: 42, color: '#8b5cf6' },
+                    { label: 'Propuesta enviada', value: 24, color: '#2563eb' },
+                    { label: 'Cierre esperado', value: 11, color: '#16a34a' }
+                ],
+                rows: [
+                    { lead: 'Alejandra Pineda', company: 'Grupo Monterrey Retail', executive: 'Fernanda Soto', stage: 'Propuesta', value: 1250000, status: 'Alto potencial' },
+                    { lead: 'Carlos Téllez', company: 'Logística del Bajío', executive: 'Diego Villalobos', stage: 'Discovery', value: 860000, status: 'En seguimiento' },
+                    { lead: 'Renata Solís', company: 'Hospital Ángeles Norte', executive: 'Regina Cárdenas', stage: 'Demo', value: 1540000, status: 'Alto potencial' },
+                    { lead: 'Mauricio Salgado', company: 'Textiles del Pacífico', executive: 'Javier Méndez', stage: 'Negociación', value: 980000, status: 'Cierre cercano' },
+                    { lead: 'Daniela Ochoa', company: 'Servicios Integrales CDMX', executive: 'Fernanda Soto', stage: 'Calificación', value: 640000, status: 'En seguimiento' }
+                ]
+            };
+        }
+
+        function renderDashboard(data) {
+            animateMetric('leads', data.metrics.leads, v => v.toString());
+            animateMetric('pipeline', data.metrics.pipeline, v => formatCurrency(v));
+            animateMetric('closeRate', data.metrics.closeRate, v => v + '%');
+            animateMetric('demos', data.metrics.demos, v => v.toString());
+            document.getElementById('bars').innerHTML = data.bars.map(item => '<div class="bar-row"><strong>' + item.label + '</strong><div class="bar-track"><div class="bar-fill" style="width:' + item.value + '%"></div></div><span>' + item.value + '%</span></div>').join('');
+            document.getElementById('funnelSteps').innerHTML = data.funnel.map((item, index) => '<div class="funnel-step" style="background:' + item.color + '; width:' + (100 - (index * 9)) + '%">' + item.label + ': <strong>' + item.value + '</strong></div>').join('');
+            document.getElementById('tableBody').innerHTML = data.rows.map(row => {
+                const statusClass = row.status === 'Alto potencial' ? 'ok' : row.status === 'En seguimiento' ? 'pending' : 'alert';
+                return '<tr><td>' + row.lead + '</td><td>' + row.company + '</td><td>' + row.executive + '</td><td>' + row.stage + '</td><td>' + formatCurrency(row.value) + '</td><td><span class="status ' + statusClass + '">' + row.status + '</span></td></tr>';
+            }).join('');
+            document.getElementById('lastSync').textContent = 'Última simulación: ' + new Date().toLocaleTimeString('es-MX');
+        }
+
+        function animateMetric(key, endValue, formatter) {
+            const element = document.querySelector('[data-counter="' + key + '"]');
+            const startValue = Number(element.dataset.current || 0);
+            const startTime = performance.now();
+            const duration = 850;
+            function frame(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const value = Math.round(startValue + ((endValue - startValue) * progress));
+                element.textContent = formatter(value);
+                if (progress < 1) requestAnimationFrame(frame);
+                else element.dataset.current = String(endValue);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function refreshData() {
+            tick += 1;
+            dashboardData.metrics.leads += 3;
+            dashboardData.metrics.pipeline += 420000 + (tick * 95000);
+            dashboardData.metrics.closeRate = Math.min(42, dashboardData.metrics.closeRate + (tick % 2));
+            dashboardData.metrics.demos += 1;
+            dashboardData.bars = dashboardData.bars.map((item, index) => ({ label: item.label, value: Math.min(99, item.value + (index % 2 === 0 ? 2 : 1)) }));
+            dashboardData.rows.unshift({
+                lead: ['Héctor Lozano', 'Paula Esquivel', 'Ricardo Nájera'][tick % 3],
+                company: ['Grupo Sureste', 'Operadora Querétaro', 'Clínica Santa Fe'][tick % 3],
+                executive: ['Fernanda Soto', 'Regina Cárdenas', 'Diego Villalobos'][tick % 3],
+                stage: ['Calificación', 'Demo', 'Negociación'][tick % 3],
+                value: 720000 + (tick * 88000),
+                status: ['En seguimiento', 'Alto potencial', 'Cierre cercano'][tick % 3]
+            });
+            dashboardData.rows = dashboardData.rows.slice(0, 6);
+            renderDashboard(dashboardData);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(value);
+        }
+
+        function exportCsv() {
+            const headers = ['Lead', 'Empresa', 'Ejecutivo', 'Etapa', 'Valor estimado', 'Estado'];
+            const lines = dashboardData.rows.map(row => [row.lead, row.company, row.executive, row.stage, row.value, row.status].join(','));
+            const csv = [headers.join(','), ...lines].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'proyecto3-crm-demo.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('CSV demo exportado correctamente');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportCsv);
+        document.getElementById('toggleMode').addEventListener('click', () => showToast('El tablero permanece en modo demo local'));
+        renderDashboard(dashboardData);
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>
