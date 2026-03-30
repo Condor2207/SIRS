@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock Demo | Vista del Proyecto</title>
+  <link rel="stylesheet" href="./frontend/assets/css/base.css" />
+  <style>
+    /* ── Preview overlay: makes interactive elements visual-only ── */
+    .preview-block { pointer-events: none; user-select: none; }
+
+    /* ── Navigation bar for this preview page ── */
+    .preview-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 2px solid var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .preview-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .preview-nav-brand span.back-arrow {
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    .preview-nav-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    /* ── Hero banner ── */
+    .preview-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #047857 100%);
+      color: #fff;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .preview-hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.5rem; }
+    .preview-hero p  { font-size: 1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 1.2rem; }
+    .badge-list { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    .badge-item {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+
+    /* ── Screen preview cards ── */
+    .screen-preview {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .screen-preview .screen-titlebar {
+      background: color-mix(in srgb, var(--border) 50%, var(--surface));
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: color-mix(in srgb, var(--text) 60%, transparent);
+      font-weight: 600;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red   { background: #EF4444; }
+    .dot-amber { background: #F59E0B; }
+    .dot-green { background: #10B981; }
+
+    /* ── Page wrapper ── */
+    .preview-page { background: var(--background); min-height: 100vh; }
+
+    /* ── Tab-style section switcher ── */
+    .preview-tabs {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .preview-tab {
+      padding: 0.75rem 1.2rem;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: default;
+      border-bottom: 2px solid transparent;
+      color: color-mix(in srgb, var(--text) 60%, transparent);
+    }
+    .preview-tab.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ── Spacing ── */
+    .preview-section { padding: 2rem 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .gap-block { margin-bottom: 2rem; }
+
+    /* ── Feature list ── */
+    .feature-list { display: grid; gap: 0.6rem; margin-top: 0.8rem; }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--primary) 6%, transparent);
+      border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+      font-size: 0.88rem;
+    }
+    .feature-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ── Tech stack tags ── */
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+    .tech-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: color-mix(in srgb, var(--primary) 15%, transparent);
+      color: var(--primary);
+      border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+
+    /* ── Two-column grid ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="preview-page">
+
+  <!-- ══════════ PREVIEW NAVIGATION ══════════ -->
+  <nav class="preview-nav" role="navigation" aria-label="Navegación de vista previa">
+    <a href="../index.html#projects" class="preview-nav-brand" aria-label="Volver al portfolio">
+      <span class="back-arrow">←</span>
+      Volver al Portfolio
+    </a>
+    <div class="preview-nav-actions">
+      <a href="./demo.html" class="btn primary">▶ Abrir Demo Interactivo</a>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <div class="preview-hero">
+    <h1>🛒 SuperStock Demo</h1>
+    <p>Sistema de gestión para supermercado — ventas, inventario, caja y reportes en una sola plataforma.</p>
+    <div class="badge-list">
+      <span class="badge-item">FastAPI</span>
+      <span class="badge-item">SQLAlchemy</span>
+      <span class="badge-item">JWT Auth</span>
+      <span class="badge-item">HTML · CSS · JS</span>
+      <span class="badge-item">Light / Dark Mode</span>
+      <span class="badge-item">Roles: Admin / Vendedor</span>
+    </div>
+  </div>
+
+  <!-- ══════════ SIMULATED TOPBAR (preview) ══════════ -->
+  <div class="preview-block">
+    <header class="topbar">
+      <h1>🛒 SuperStock Demo</h1>
+      <div class="actions">
+        <span class="user-badge">👤 admin</span>
+        <button class="btn ghost" type="button">🌙 Tema</button>
+        <button class="btn danger" type="button">Salir</button>
+      </div>
+    </header>
+  </div>
+
+  <!-- ══════════ SIMULATED SIDEBAR + DASHBOARD ══════════ -->
+  <div class="preview-block">
+    <div class="app-body">
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-user">
+          <strong>admin</strong>
+          <span class="sidebar-role">admin</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="sidebar-link active"><span class="sidebar-icon">📊</span>Dashboard</a>
+          <a class="sidebar-link"><span class="sidebar-icon">💰</span>Ventas (POS)</a>
+          <a class="sidebar-link"><span class="sidebar-icon">🏦</span>Caja</a>
+          <a class="sidebar-link"><span class="sidebar-icon">📋</span>Inventario</a>
+          <a class="sidebar-link"><span class="sidebar-icon">📈</span>Reportes</a>
+          <div class="sidebar-sep">Administración</div>
+          <a class="sidebar-link"><span class="sidebar-icon">📦</span>Productos</a>
+          <a class="sidebar-link"><span class="sidebar-icon">🚚</span>Proveedores</a>
+          <a class="sidebar-link"><span class="sidebar-icon">🛒</span>Compras</a>
+        </nav>
+      </aside>
+
+      <!-- Main content: Dashboard -->
+      <main class="main-content">
+        <h2 style="margin-bottom:1.2rem; font-size:1.4rem;">
+          Panel de Control
+          <span class="muted" style="font-size:0.9rem; font-weight:400; margin-left:0.5rem;">lunes, 30 de marzo de 2026</span>
+        </h2>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card green kpi-link">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Ventas del Día</span>
+              <strong class="kpi-value">₲ 2.450.000</strong>
+            </div>
+          </div>
+          <div class="kpi-card emerald kpi-link">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Ganancia del Día</span>
+              <strong class="kpi-value">₲ 612.500</strong>
+            </div>
+          </div>
+          <div class="kpi-card slate kpi-link">
+            <div class="kpi-icon">🧾</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Transacciones</span>
+              <strong class="kpi-value">18</strong>
+            </div>
+          </div>
+          <div class="kpi-card slate kpi-link">
+            <div class="kpi-icon">💵</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Ticket Promedio</span>
+              <strong class="kpi-value">₲ 136.111</strong>
+            </div>
+          </div>
+          <div class="kpi-card amber kpi-link">
+            <div class="kpi-icon">⚠️</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Bajo Stock</span>
+              <strong class="kpi-value">3 prods</strong>
+            </div>
+          </div>
+          <div class="kpi-card caja-on">
+            <div class="kpi-icon">🏦</div>
+            <div class="kpi-content">
+              <span class="kpi-label">Estado Caja</span>
+              <strong class="kpi-value">ABIERTA ✅</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="card">
+          <h3 class="section-title">📦 Inventario Actual</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th><th>Categoría</th><th>Stock</th>
+                  <th>Mínimo</th><th>Estado</th><th>Precio Venta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Arroz Largo 1kg</strong></td>
+                  <td>Granos</td>
+                  <td><strong>85</strong></td>
+                  <td>20</td>
+                  <td><span class="badge ok">✓ OK</span></td>
+                  <td>₲ 8.500</td>
+                </tr>
+                <tr>
+                  <td><strong>Aceite Girasol 900ml</strong></td>
+                  <td>Aceites</td>
+                  <td><strong>12</strong></td>
+                  <td>15</td>
+                  <td><span class="badge low">⚠ Bajo</span></td>
+                  <td>₲ 18.900</td>
+                </tr>
+                <tr>
+                  <td><strong>Harina 000 1kg</strong></td>
+                  <td>Harinas</td>
+                  <td><strong>47</strong></td>
+                  <td>10</td>
+                  <td><span class="badge ok">✓ OK</span></td>
+                  <td>₲ 6.200</td>
+                </tr>
+                <tr>
+                  <td><strong>Azúcar Común 1kg</strong></td>
+                  <td>Azúcares</td>
+                  <td><strong>8</strong></td>
+                  <td>10</td>
+                  <td><span class="badge low">⚠ Bajo</span></td>
+                  <td>₲ 5.800</td>
+                </tr>
+                <tr>
+                  <td><strong>Leche Entera 1L</strong></td>
+                  <td>Lácteos</td>
+                  <td><strong>60</strong></td>
+                  <td>25</td>
+                  <td><span class="badge ok">✓ OK</span></td>
+                  <td>₲ 4.500</td>
+                </tr>
+                <tr>
+                  <td><strong>Yerba Mate 500g</strong></td>
+                  <td>Infusiones</td>
+                  <td><strong>7</strong></td>
+                  <td>10</td>
+                  <td><span class="badge low">⚠ Bajo</span></td>
+                  <td>₲ 12.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ══════════ PROJECT DETAILS ══════════ -->
+  <div class="preview-section">
+
+    <!-- Features -->
+    <div class="gap-block">
+      <p class="section-label">✦ Funcionalidades</p>
+      <div class="two-col">
+        <div class="feature-list">
+          <div class="feature-item"><span class="feature-icon">📊</span><div><strong>Dashboard en tiempo real</strong> — KPIs de ventas, ganancias, transacciones y alertas de stock bajo.</div></div>
+          <div class="feature-item"><span class="feature-icon">💰</span><div><strong>Punto de Venta (POS)</strong> — Registro de ventas, carrito de compra, factura automática y múltiples métodos de pago.</div></div>
+          <div class="feature-item"><span class="feature-icon">🏦</span><div><strong>Control de Caja</strong> — Apertura y cierre de caja diaria con saldo inicial y cierre con resumen.</div></div>
+          <div class="feature-item"><span class="feature-icon">📋</span><div><strong>Inventario</strong> — Lista de productos con alertas de stock mínimo y control de reabastecimiento.</div></div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item"><span class="feature-icon">📈</span><div><strong>Reportes</strong> — Reportes de ventas por período, productos más vendidos y rentabilidad.</div></div>
+          <div class="feature-item"><span class="feature-icon">📦</span><div><strong>Gestión de Productos</strong> — Alta, baja y modificación de productos con categorías y precios.</div></div>
+          <div class="feature-item"><span class="feature-icon">🚚</span><div><strong>Proveedores</strong> — Registro y administración de proveedores vinculados a productos.</div></div>
+          <div class="feature-item"><span class="feature-icon">🔒</span><div><strong>Autenticación con roles</strong> — JWT con roles Admin y Vendedor; permisos diferenciados por módulo.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="gap-block">
+      <p class="section-label">⚙ Stack Tecnológico</p>
+      <div class="two-col">
+        <div class="card">
+          <h4 style="margin-bottom:0.8rem; color:var(--primary);">Backend</h4>
+          <div class="tech-stack">
+            <span class="tech-pill">Python 3</span>
+            <span class="tech-pill">FastAPI</span>
+            <span class="tech-pill">SQLAlchemy</span>
+            <span class="tech-pill">SQLite</span>
+            <span class="tech-pill">JWT / python-jose</span>
+            <span class="tech-pill">passlib / bcrypt</span>
+            <span class="tech-pill">Uvicorn</span>
+            <span class="tech-pill">Pydantic v2</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4 style="margin-bottom:0.8rem; color:var(--primary);">Frontend</h4>
+          <div class="tech-stack">
+            <span class="tech-pill">HTML5</span>
+            <span class="tech-pill">CSS3</span>
+            <span class="tech-pill">JavaScript ES6+</span>
+            <span class="tech-pill">Fetch API</span>
+            <span class="tech-pill">LocalStorage</span>
+            <span class="tech-pill">Light / Dark Theme</span>
+            <span class="tech-pill">Responsive Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login mockup -->
+    <div class="gap-block preview-block">
+      <p class="section-label">🔐 Pantalla de Acceso</p>
+      <div class="screen-preview" style="max-width:480px; margin:0 auto;">
+        <div class="screen-titlebar">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-amber"></span>
+          <span class="dot dot-green"></span>
+          <span style="margin-left:0.5rem;">SuperStock Demo — Inicio</span>
+        </div>
+        <div style="background:var(--background); padding:2rem;">
+          <header class="topbar" style="position:static; margin:-2rem -2rem 2rem; border-radius:0;">
+            <h1>SuperStock Demo</h1>
+            <div class="actions">
+              <button class="btn ghost" type="button">Tema</button>
+            </div>
+          </header>
+          <div class="card login-card" style="max-width:100%;">
+            <h2>Ingreso al Sistema</h2>
+            <p class="muted">Gestión de ventas, inventario y reportes</p>
+            <div class="stack" style="margin-top:0.9rem;">
+              <label>
+                Usuario
+                <input type="text" value="admin" readonly />
+              </label>
+              <label>
+                Contraseña
+                <input type="password" value="admin123" readonly />
+              </label>
+              <button class="btn primary block" type="button">Ingresar</button>
+            </div>
+            <div class="hint-box">
+              <strong>Credenciales demo:</strong><br />
+              Admin: admin / admin123<br />
+              Vendedor: vendedor / 123456
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules overview -->
+    <div class="gap-block preview-block">
+      <p class="section-label">🧩 Módulos del Sistema</p>
+      <div class="modules-grid">
+        <div class="module-card primary">
+          <h4>📊 Dashboard</h4>
+          <p>Métricas y ganancias del día</p>
+        </div>
+        <div class="module-card secondary">
+          <h4>📦 Productos</h4>
+          <p>Gestión de inventario</p>
+        </div>
+        <div class="module-card secondary">
+          <h4>🚚 Proveedores</h4>
+          <p>Administrar proveedores</p>
+        </div>
+        <div class="module-card accent">
+          <h4>💰 Ventas (POS)</h4>
+          <p>Registrar venta y generar factura</p>
+        </div>
+        <div class="module-card neutral">
+          <h4>📋 Inventario</h4>
+          <p>Stock y alertas de reabastecimiento</p>
+        </div>
+        <div class="module-card neutral">
+          <h4>🏦 Caja</h4>
+          <p>Apertura/cierre de caja</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center; padding:2rem 0 1rem;">
+      <p class="muted" style="margin-bottom:1rem;">¿Querés ver el sistema en acción?</p>
+      <a href="./demo.html" class="btn primary" style="font-size:1rem; padding:0.8rem 2rem;">
+        ▶ Abrir Demo Interactivo
+      </a>
+      <span style="margin:0 0.75rem; color:var(--border);">|</span>
+      <a href="../index.html#projects" class="btn ghost" style="font-size:1rem; padding:0.8rem 2rem;">
+        ← Volver al Portfolio
+      </a>
+    </div>
+
+  </div>
+
+  <script src="./frontend/assets/js/theme.js"></script>
+</body>
+</html>

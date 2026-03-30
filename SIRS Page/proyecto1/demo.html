@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock Demo | Iniciando…</title>
+  <link rel="stylesheet" href="./frontend/assets/css/base.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    .demo-card {
+      max-width: 520px;
+      width: 100%;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid color-mix(in srgb, var(--primary) 25%, transparent);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .credentials-box {
+      text-align: left;
+      margin-top: 1.2rem;
+    }
+    .cred-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--primary) 8%, transparent);
+      margin-bottom: 0.4rem;
+      font-size: 0.88rem;
+    }
+    .cred-role { font-weight: 700; color: var(--primary); }
+    .cred-pass { font-family: monospace; font-weight: 600; }
+    .back-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: color-mix(in srgb, var(--text) 55%, transparent);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <div class="card demo-card">
+    <div class="spinner" id="spinner" aria-label="Cargando demo"></div>
+    <h2 style="margin-bottom:0.5rem;">Abriendo SuperStock Demo</h2>
+    <p class="muted">Serás redirigido al sistema en un momento…</p>
+
+    <div class="hint-box credentials-box">
+      <strong>Credenciales de acceso:</strong>
+      <div class="cred-row" style="margin-top:0.6rem;">
+        <span class="cred-role">👤 admin</span>
+        <span class="cred-pass">admin123</span>
+      </div>
+      <div class="cred-row">
+        <span class="cred-role">🏪 vendedor</span>
+        <span class="cred-pass">123456</span>
+      </div>
+    </div>
+
+    <p id="statusMsg" class="muted" style="margin-top:1rem; font-size:0.82rem;">Comprobando conexión con el servidor…</p>
+  </div>
+
+  <a href="./index.html" class="back-link">← Ver presentación del proyecto</a>
+
+  <script>
+    // Try to reach the API. If available → go to the live frontend.
+    // If not → show a setup guide inline.
+    const FRONTEND = "./frontend/index.html";
+    const API_HEALTH = "http://localhost:8000/";
+
+    async function checkAndRedirect() {
+      try {
+        const res = await fetch(API_HEALTH, { signal: AbortSignal.timeout(3000) });
+        if (res.ok) {
+          document.getElementById("statusMsg").textContent = "Servidor detectado. Redirigiendo…";
+          setTimeout(() => { window.location.href = FRONTEND; }, 600);
+          return;
+        }
+      } catch (_) { /* backend not running */ }
+
+      // Backend not reachable — redirect anyway to the frontend so the user
+      // can at least see the login UI, and show a soft warning.
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("statusMsg").innerHTML =
+        `<span style="color:var(--accent);">⚠ El servidor local no está activo.</span><br>
+         Se abrirá el frontend igualmente. Para el modo demo completo inicia el backend:<br>
+         <code style="display:inline-block;margin-top:0.4rem;padding:0.3rem 0.6rem;
+           background:color-mix(in srgb,var(--primary) 10%,transparent);
+           border-radius:6px;font-size:0.82rem;">
+           cd proyecto1/backend &amp;&amp; uvicorn app.main:app --reload --port 8000
+         </code>`;
+
+      setTimeout(() => { window.location.href = FRONTEND; }, 4000);
+    }
+
+    checkAndRedirect();
+  </script>
+
+  <script src="./frontend/assets/js/theme.js"></script>
+</body>
+</html>
