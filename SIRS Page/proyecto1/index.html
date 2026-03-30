@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock Demo | Vista del Proyecto</title>
+  <style>
+    :root {
+      --primary: #10B981;
+      --secondary: #34D399;
+      --bg: #F1F5F9;
+      --surface: #FFFFFF;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #D1D5DB;
+      --accent: #F59E0B;
+      --success: #059669;
+      --error: #DC2626;
+      --shadow: 0 4px 16px rgba(15,23,42,.07);
+      --shadow-lg: 0 16px 40px rgba(15,23,42,.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .topbar-brand span { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -.4px; }
+    .topbar-badge {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .25rem .6rem;
+      border-radius: 20px;
+      letter-spacing: .4px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1.1rem;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: .88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .18s;
+    }
+    .back-btn:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f2b1e 0%, #0d4228 50%, #0a3320 100%);
+      color: #fff;
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -.6px;
+      margin-bottom: .8rem;
+    }
+    .hero h1 span { color: var(--secondary); }
+    .hero p {
+      font-size: 1.1rem;
+      opacity: .85;
+      max-width: 600px;
+      margin: 0 auto 1.6rem;
+      line-height: 1.6;
+    }
+    .hero-tags { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+    .hero-tag {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: .35rem .8rem;
+      border-radius: 20px;
+      font-size: .82rem;
+      font-weight: 600;
+    }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+      padding-bottom: .6rem;
+      border-bottom: 2px solid rgba(16,185,129,.25);
+    }
+
+    /* ── INFO GRID ── */
+    .info-section { padding: 3rem 0 2rem; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 700px) { .info-grid { grid-template-columns: 1fr; } }
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+    .info-card h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: .8rem; }
+    .info-card ul { list-style: none; display: grid; gap: .5rem; }
+    .info-card ul li { display: flex; align-items: flex-start; gap: .6rem; font-size: .9rem; line-height: 1.5; }
+    .check { color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+    /* ── MOCK DASHBOARD ── */
+    .demo-section { padding: 2rem 0 3rem; }
+    .mock-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    /* browser chrome mockup */
+    .mock-chrome {
+      background: #e8ecf0;
+      padding: .55rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .mock-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .mock-dot.r { background: #fc5f5a; }
+    .mock-dot.y { background: #fdbc2c; }
+    .mock-dot.g { background: #33c748; }
+    .mock-url {
+      flex: 1;
+      background: #fff;
+      border-radius: 8px;
+      padding: .3rem .8rem;
+      font-size: .78rem;
+      color: #64748b;
+      font-family: monospace;
+    }
+
+    /* app topbar */
+    .mock-topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.2rem;
+    }
+    .mock-topbar-brand { font-size: 1rem; font-weight: 800; color: var(--primary); }
+    .mock-topbar-actions { display: flex; gap: .5rem; }
+    .mock-chip {
+      background: rgba(16,185,129,.15);
+      color: var(--primary);
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .28rem .65rem;
+      border-radius: 7px;
+    }
+    .mock-chip.ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .mock-chip.danger { background: rgba(220,38,38,.12); color: var(--error); }
+
+    /* app body */
+    .mock-body { display: flex; height: 480px; }
+    @media (max-width: 700px) { .mock-body { height: auto; flex-direction: column; } }
+
+    /* sidebar */
+    .mock-sidebar {
+      width: 190px;
+      min-width: 190px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: .6rem 0;
+    }
+    @media (max-width: 700px) { .mock-sidebar { width: 100%; min-width: 0; display: flex; flex-wrap: wrap; padding: .4rem; border-right: none; border-bottom: 1px solid var(--border); } }
+    .mock-user {
+      padding: .8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: .4rem;
+    }
+    .mock-user strong { font-size: .88rem; display: block; }
+    .mock-user span { font-size: .72rem; color: var(--primary); background: rgba(16,185,129,.12); padding: .15rem .45rem; border-radius: 5px; }
+    .mock-nav-item {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .65rem 1rem;
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: default;
+    }
+    .mock-nav-item.active {
+      background: rgba(16,185,129,.1);
+      color: var(--primary);
+      font-weight: 700;
+      border-left: 3px solid var(--primary);
+    }
+    @media (max-width: 700px) {
+      .mock-user { display: none; }
+      .mock-nav-item { padding: .45rem .65rem; font-size: .78rem; }
+    }
+
+    /* main */
+    .mock-main { flex: 1; min-width: 0; padding: 1.2rem; overflow: hidden; background: var(--bg); }
+    .mock-page-title { font-size: 1.1rem; font-weight: 700; margin-bottom: .9rem; }
+    .mock-kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-bottom: 1rem; }
+    @media (max-width: 700px) { .mock-kpi-row { grid-template-columns: repeat(2, 1fr); } }
+    .mock-kpi {
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+    .mk-g { background: linear-gradient(135deg, #10B981, #059669); }
+    .mk-e { background: linear-gradient(135deg, #059669, #047857); }
+    .mk-s { background: linear-gradient(135deg, #475569, #334155); }
+    .mk-a { background: linear-gradient(135deg, #F59E0B, #D97706); color: #1a1304; }
+    .mk-r { background: linear-gradient(135deg, #DC2626, #b91c1c); }
+    .mock-kpi-icon { font-size: 1.6rem; }
+    .mock-kpi-lbl { font-size: .7rem; opacity: .9; }
+    .mock-kpi-val { font-size: 1.1rem; font-weight: 800; }
+
+    .mock-table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .mock-table-head {
+      padding: .7rem 1rem;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      background: rgba(16,185,129,.06);
+    }
+    .mock-table-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      padding: .6rem 1rem;
+      font-size: .8rem;
+      border-bottom: 1px solid rgba(0,0,0,.05);
+    }
+    .mock-table-row:last-child { border-bottom: none; }
+    .mock-table-row.header { font-weight: 700; font-size: .75rem; color: var(--muted); text-transform: uppercase; }
+    .badge { display: inline-block; padding: .2rem .5rem; border-radius: 5px; font-size: .72rem; font-weight: 700; }
+    .badge-ok { background: rgba(5,150,105,.15); color: var(--success); }
+    .badge-low { background: rgba(220,38,38,.12); color: var(--error); }
+    .no-events { pointer-events: none; user-select: none; }
+
+    /* ── STACK SECTION ── */
+    .stack-section { padding: 2rem 0 3rem; background: var(--surface); }
+    .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+    .stack-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.3rem;
+      text-align: center;
+    }
+    .stack-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .stack-name { font-weight: 700; font-size: .9rem; }
+    .stack-desc { font-size: .78rem; color: var(--muted); margin-top: .25rem; }
+
+    /* ── CREDENTIALS ── */
+    .creds-section { padding: 2.5rem 0; }
+    .creds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .creds-grid { grid-template-columns: 1fr; } }
+    .cred-card {
+      background: var(--surface);
+      border: 1.5px dashed var(--secondary);
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .cred-card h4 { font-size: .95rem; font-weight: 700; color: var(--primary); margin-bottom: .6rem; }
+    .cred-row { display: flex; gap: .5rem; margin-bottom: .35rem; font-size: .88rem; }
+    .cred-label { color: var(--muted); min-width: 90px; }
+    .cred-value { font-weight: 700; font-family: monospace; color: var(--text); }
+
+    /* ── FOOTER ── */
+    .footer { background: #0f2b1e; color: rgba(255,255,255,.7); text-align: center; padding: 1.5rem; font-size: .85rem; }
+    .footer a { color: var(--secondary); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ── OVERLAY NOTICE ── */
+    .view-only-notice {
+      background: rgba(16,185,129,.1);
+      border: 1.5px solid var(--secondary);
+      border-radius: 12px;
+      padding: .75rem 1.2rem;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--success);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body class="no-events">
+
+  <!-- ── TOP BAR ── -->
+  <header class="topbar no-events" style="pointer-events:all">
+    <a href="../../index.html" class="topbar-brand" style="pointer-events:all">
+      <span>SIRS</span>
+      <span class="topbar-badge">Portfolio</span>
+    </a>
+    <a href="../../index.html#projects" class="back-btn" style="pointer-events:all">← Volver al Portfolio</a>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="container">
+      <h1>🛒 <span>SuperStock</span> Demo</h1>
+      <p>Sistema de gestión para supermercados: ventas, inventario, caja, proveedores y reportes gerenciales en una sola plataforma.</p>
+      <div class="hero-tags">
+        <span class="hero-tag">FastAPI</span>
+        <span class="hero-tag">SQLAlchemy</span>
+        <span class="hero-tag">JWT Auth</span>
+        <span class="hero-tag">HTML · CSS · JS</span>
+        <span class="hero-tag">SQLite</span>
+        <span class="hero-tag">Chile · CLP</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INFO ── -->
+  <section class="info-section">
+    <div class="container">
+      <h2 class="section-title">¿Qué hace este sistema?</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>📦 Módulos Principales</h3>
+          <ul>
+            <li><span class="check">✓</span> Dashboard ejecutivo con KPIs en tiempo real</li>
+            <li><span class="check">✓</span> Punto de Venta (POS) con emisión de facturas</li>
+            <li><span class="check">✓</span> Control de inventario y alertas de stock bajo</li>
+            <li><span class="check">✓</span> Gestión de proveedores y órdenes de compra</li>
+            <li><span class="check">✓</span> Apertura y cierre de caja diaria</li>
+            <li><span class="check">✓</span> Reportes de ventas y ganancias por período</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>⚙ Características Técnicas</h3>
+          <ul>
+            <li><span class="check">✓</span> API REST con FastAPI + documentación automática</li>
+            <li><span class="check">✓</span> Autenticación segura con JWT Bearer tokens</li>
+            <li><span class="check">✓</span> Roles diferenciados: Administrador y Vendedor</li>
+            <li><span class="check">✓</span> Interfaz con modo claro y oscuro (Light / Dark)</li>
+            <li><span class="check">✓</span> Diseño responsive para escritorio y móvil</li>
+            <li><span class="check">✓</span> Base de datos relacional con SQLAlchemy ORM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MOCK DASHBOARD ── -->
+  <section class="demo-section">
+    <div class="container">
+      <h2 class="section-title">Vista previa del sistema</h2>
+      <div class="view-only-notice">👁 Vista de solo lectura — interacción desactivada en esta pantalla</div>
+      <div class="mock-wrapper">
+        <!-- browser chrome -->
+        <div class="mock-chrome">
+          <div class="mock-dot r"></div>
+          <div class="mock-dot y"></div>
+          <div class="mock-dot g"></div>
+          <div class="mock-url">localhost:3000/pages/dashboard.html</div>
+        </div>
+
+        <!-- app topbar -->
+        <div class="mock-topbar">
+          <span class="mock-topbar-brand">🛒 SuperStock Demo</span>
+          <div class="mock-topbar-actions">
+            <span class="mock-chip">admin</span>
+            <span class="mock-chip ghost">🌙 Tema</span>
+            <span class="mock-chip danger">Salir</span>
+          </div>
+        </div>
+
+        <!-- app body -->
+        <div class="mock-body">
+          <!-- sidebar -->
+          <aside class="mock-sidebar">
+            <div class="mock-user">
+              <strong>admin</strong>
+              <span>administrador</span>
+            </div>
+            <div class="mock-nav-item active"><span>📊</span> Dashboard</div>
+            <div class="mock-nav-item"><span>🛒</span> Ventas</div>
+            <div class="mock-nav-item"><span>📦</span> Inventario</div>
+            <div class="mock-nav-item"><span>🧾</span> Productos</div>
+            <div class="mock-nav-item"><span>🚚</span> Proveedores</div>
+            <div class="mock-nav-item"><span>🏦</span> Caja</div>
+            <div class="mock-nav-item"><span>📈</span> Reportes</div>
+          </aside>
+
+          <!-- main content -->
+          <main class="mock-main">
+            <div class="mock-page-title">Panel de Control <span style="font-size:.8rem;color:#64748b;font-weight:400;">— lunes, 30 de junio de 2025</span></div>
+
+            <div class="mock-kpi-row">
+              <div class="mock-kpi mk-g">
+                <span class="mock-kpi-icon">💰</span>
+                <div>
+                  <div class="mock-kpi-lbl">Ventas del Día</div>
+                  <div class="mock-kpi-val">₲ 1.845.200</div>
+                </div>
+              </div>
+              <div class="mock-kpi mk-e">
+                <span class="mock-kpi-icon">📈</span>
+                <div>
+                  <div class="mock-kpi-lbl">Ganancia del Día</div>
+                  <div class="mock-kpi-val">₲ 487.300</div>
+                </div>
+              </div>
+              <div class="mock-kpi mk-s">
+                <span class="mock-kpi-icon">🧾</span>
+                <div>
+                  <div class="mock-kpi-lbl">Transacciones</div>
+                  <div class="mock-kpi-val">34</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mock-table-card">
+              <div class="mock-table-head">📦 Inventario Actual</div>
+              <div class="mock-table-row header">
+                <span>Producto</span>
+                <span>Stock</span>
+                <span>Mínimo</span>
+                <span>Estado</span>
+              </div>
+              <div class="mock-table-row">
+                <span>Arroz 1kg</span>
+                <span>142</span>
+                <span>20</span>
+                <span><span class="badge badge-ok">OK</span></span>
+              </div>
+              <div class="mock-table-row">
+                <span>Aceite Girasol</span>
+                <span>8</span>
+                <span>15</span>
+                <span><span class="badge badge-low">Bajo</span></span>
+              </div>
+              <div class="mock-table-row">
+                <span>Leche Entera 1L</span>
+                <span>56</span>
+                <span>10</span>
+                <span><span class="badge badge-ok">OK</span></span>
+              </div>
+              <div class="mock-table-row">
+                <span>Harina 000</span>
+                <span>12</span>
+                <span>20</span>
+                <span><span class="badge badge-low">Bajo</span></span>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STACK ── -->
+  <section class="stack-section">
+    <div class="container">
+      <h2 class="section-title">Stack Tecnológico</h2>
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="stack-icon">⚡</div>
+          <div class="stack-name">FastAPI</div>
+          <div class="stack-desc">API REST async · Python 3.10+</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-icon">🗄</div>
+          <div class="stack-name">SQLAlchemy</div>
+          <div class="stack-desc">ORM · SQLite en demo</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-icon">🔐</div>
+          <div class="stack-name">JWT Auth</div>
+          <div class="stack-desc">python-jose · Roles RBAC</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-icon">🌐</div>
+          <div class="stack-name">Frontend</div>
+          <div class="stack-desc">HTML · CSS · JavaScript puro</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-icon">🌙</div>
+          <div class="stack-name">Light / Dark</div>
+          <div class="stack-desc">Tema persistente en localStorage</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-icon">📱</div>
+          <div class="stack-name">Responsive</div>
+          <div class="stack-desc">Desktop · Tablet · Móvil</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CREDENTIALS ── -->
+  <section class="creds-section">
+    <div class="container">
+      <h2 class="section-title">Credenciales de Demo</h2>
+      <div class="creds-grid">
+        <div class="cred-card">
+          <h4>👤 Administrador</h4>
+          <div class="cred-row"><span class="cred-label">Usuario:</span><span class="cred-value">admin</span></div>
+          <div class="cred-row"><span class="cred-label">Contraseña:</span><span class="cred-value">admin123</span></div>
+          <p style="margin-top:.6rem;font-size:.8rem;color:#64748b;">Acceso completo: ventas, inventario, reportes, caja, proveedores.</p>
+        </div>
+        <div class="cred-card">
+          <h4>🛒 Vendedor</h4>
+          <div class="cred-row"><span class="cred-label">Usuario:</span><span class="cred-value">vendedor</span></div>
+          <div class="cred-row"><span class="cred-label">Contraseña:</span><span class="cred-value">123456</span></div>
+          <p style="margin-top:.6rem;font-size:.8rem;color:#64748b;">Acceso limitado: ventas, inventario y caja propios.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <p>SuperStock Demo · parte del portfolio <a href="../../index.html">SIRS Consulting</a></p>
+  </footer>
+
+</body>
+</html>
