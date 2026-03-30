@@ -6,6 +6,7 @@ on:
       - main
       - master
       - copilot/add-online-access
+      - copilot/fix-github-pages-error
   workflow_dispatch:
 
 permissions:
