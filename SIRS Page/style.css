@@ -751,6 +751,14 @@ section {
     content: '🏦';
 }
 
+.project-image--pos {
+    background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
+}
+
+.project-image--pos::after {
+    content: '🛒';
+}
+
 .project-image--construction {
     background: linear-gradient(135deg, #ccfbf1 0%, #5eead4 100%);
 }

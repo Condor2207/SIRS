@@ -1,587 +1,474 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto 1 Demo | Dashboard Bancario Chile</title>
+    <title>SGS Demo | Sistema de Gestion para Supermercados</title>
     <style>
         :root {
-            --bg: #f8fafc;
+            --bg: #f0fdf4;
             --surface: #ffffff;
-            --surface-alt: #eff6ff;
-            --sidebar: #0f172a;
+            --surface-alt: #ecfdf5;
+            --sidebar: #064e3b;
             --text: #0f172a;
             --muted: #64748b;
-            --primary: #2563eb;
-            --primary-soft: #dbeafe;
-            --success: #16a34a;
-            --warning: #ea580c;
-            --border: #e2e8f0;
-            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+            --primary: #10b981;
+            --primary-soft: #d1fae5;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #d1fae5;
+            --shadow: 0 20px 45px rgba(16,185,129,0.08);
         }
         * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-        .demo-banner {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
-            color: #fff;
-            text-align: center;
-            padding: 12px 16px;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-        }
-        .layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 48px);
-        }
-        .sidebar {
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
-            padding: 28px 22px;
-        }
-        .brand {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .sidebar p {
-            margin: 0 0 22px;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-        .nav-chip {
-            display: block;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border-radius: 14px;
-            background: rgba(148, 163, 184, 0.12);
-            color: #e2e8f0;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .nav-chip.active {
-            background: rgba(37, 99, 235, 0.22);
-            border: 1px solid rgba(96, 165, 250, 0.35);
-        }
-        .sidebar-stats {
-            margin-top: 26px;
-            padding: 18px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .sidebar-stats strong {
-            display: block;
-            font-size: 1.8rem;
-            margin-top: 6px;
-        }
-        .content {
-            padding: 24px;
-        }
-        .breadcrumb {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 18px;
-            color: var(--muted);
-            font-size: 14px;
-        }
-        .breadcrumb a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 700;
-        }
-        .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-        .hero h1 {
-            margin: 0 0 8px;
-            font-size: clamp(1.8rem, 3vw, 2.6rem);
-        }
-        .hero p {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.7;
-            max-width: 760px;
-        }
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            border: 0;
-            border-radius: 14px;
-            padding: 14px 18px;
-            font-weight: 800;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-demo { background: var(--success); color: #fff; }
-        .btn-project { background: var(--primary); color: #fff; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        .demo-banner { position: sticky; top: 0; z-index: 50; background: linear-gradient(90deg, #059669 0%, #047857 100%); color: #fff; text-align: center; padding: 10px 16px; font-weight: 800; letter-spacing: 0.04em; font-size: 13px; }
+        .layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 44px); }
+        .sidebar { background: linear-gradient(180deg, #064e3b 0%, #065f46 100%); color: #d1fae5; padding: 24px 18px; }
+        .brand { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .brand-sub { font-size: 12px; color: #6ee7b7; margin-bottom: 22px; }
+        .nav-chip { display: block; padding: 11px 14px; margin-bottom: 8px; border-radius: 12px; background: rgba(110,231,183,0.1); color: #d1fae5; text-decoration: none; font-weight: 600; cursor: pointer; border: none; width: 100%; text-align: left; font-size: 0.95rem; transition: background .15s; }
+        .nav-chip:hover { background: rgba(110,231,183,0.18); }
+        .nav-chip.active { background: rgba(16,185,129,0.3); border: 1px solid rgba(110,231,183,0.4); color: #fff; }
+        .sidebar-info { margin-top: 24px; padding: 16px; border-radius: 14px; background: rgba(255,255,255,0.06); font-size: 13px; color: #6ee7b7; }
+        .sidebar-info strong { display: block; font-size: 1.6rem; color: #fff; margin-top: 4px; }
+        .content { padding: 24px; }
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; color: var(--muted); font-size: 13px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; background: linear-gradient(135deg, #fff 0%, #ecfdf5 100%); border: 1px solid var(--border); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .hero h1 { margin: 0 0 6px; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+        .hero p { margin: 0; color: var(--muted); line-height: 1.6; max-width: 680px; }
+        .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+        .btn { border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: opacity .15s; }
+        .btn:hover { opacity: .85; }
+        .btn-primary { background: var(--primary); color: #fff; }
         .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 16px;
-            margin: 22px 0;
-        }
-        .metric-card, .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            box-shadow: var(--shadow);
-        }
-        .metric-card {
-            padding: 20px;
-        }
-        .metric-label {
-            color: var(--muted);
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .metric-foot {
-            color: var(--success);
-            font-size: 13px;
-            font-weight: 700;
-        }
-        .panel-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-        .panel {
-            padding: 22px;
-        }
-        .panel h2 {
-            margin: 0 0 6px;
-            font-size: 1.1rem;
-        }
-        .panel p {
-            margin: 0 0 18px;
-            color: var(--muted);
-        }
-        .bar-row {
-            display: grid;
-            grid-template-columns: 140px 1fr 90px;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-        .bar-track {
-            background: #e2e8f0;
-            border-radius: 999px;
-            height: 12px;
-            overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
-        }
-        .donut {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            margin: 0 auto 18px;
-            position: relative;
-            background: conic-gradient(#16a34a 0 62%, #f59e0b 62% 88%, #ef4444 88% 100%);
-        }
-        .donut::after {
-            content: 'Estado';
-            position: absolute;
-            inset: 28px;
-            border-radius: 50%;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--text);
-            text-align: center;
-        }
-        .legend {
-            display: grid;
-            gap: 10px;
-        }
-        .legend-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        .legend-swatch {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .table-wrap {
-            overflow: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 760px;
-        }
-        th, td {
-            padding: 14px 12px;
-            border-bottom: 1px solid var(--border);
-            text-align: left;
-        }
-        th {
-            color: var(--muted);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .status {
-            display: inline-flex;
-            align-items: center;
-            border-radius: 999px;
-            padding: 6px 10px;
-            font-size: 12px;
-            font-weight: 800;
-        }
+        .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
+        .metric-label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .metric-value { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+        .metric-foot { font-size: 12px; font-weight: 700; color: var(--success); }
+        .metric-foot.warn { color: var(--warning); }
+        .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
+        .panel h2 { margin: 0 0 4px; font-size: 1rem; }
+        .panel p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+        .panel-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 14px; margin-bottom: 14px; }
+        .bar-row { display: grid; grid-template-columns: 160px 1fr 80px; gap: 10px; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; }
+        .bar-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
+        .donut { width: 170px; height: 170px; border-radius: 50%; margin: 0 auto 14px; position: relative; }
+        .donut::after { content: 'Ventas'; position: absolute; inset: 26px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: .9rem; font-weight: 800; color: var(--text); }
+        .legend { display: grid; gap: 8px; }
+        .legend-item { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 13px; }
+        .legend-swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 13px 11px; border-bottom: 1px solid var(--border); text-align: left; font-size: 13px; }
+        th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; }
         .status.ok { background: #dcfce7; color: #166534; }
-        .status.pending { background: #ffedd5; color: #9a3412; }
-        .status.alert { background: #fee2e2; color: #991b1b; }
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .toolbar small {
-            color: var(--muted);
-            font-weight: 700;
-        }
-        .toast {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            background: #0f172a;
-            color: #fff;
-            padding: 14px 16px;
-            border-radius: 14px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.25s ease;
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        @media (max-width: 1100px) {
-            .metrics,
-            .panel-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        @media (max-width: 920px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                padding-bottom: 12px;
-            }
-            .hero {
-                flex-direction: column;
-            }
-        }
-        @media (max-width: 720px) {
-            .content {
-                padding: 16px;
-            }
-            .metrics,
-            .panel-grid {
-                grid-template-columns: 1fr;
-            }
-            .bar-row {
-                grid-template-columns: 1fr;
-            }
-            .hero-actions,
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
+        .status.warn { background: #fef9c3; color: #854d0e; }
+        .status.danger { background: #fee2e2; color: #991b1b; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .toolbar small { color: var(--muted); font-weight: 700; font-size: 12px; }
+        .table-wrap { overflow: auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .pos-grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
+        .product-btn { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all .15s; font-size: 12px; font-weight: 700; }
+        .product-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
+        .product-name { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+        .product-price { font-size: 13px; color: var(--primary); font-weight: 800; margin-top: 2px; }
+        .cart { display: flex; flex-direction: column; height: 100%; }
+        .cart-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; }
+        .cart-items { flex: 1; overflow: auto; min-height: 200px; }
+        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+        .cart-row strong { font-weight: 700; }
+        .cart-qty { display: flex; align-items: center; gap: 6px; }
+        .qty-btn { background: var(--primary-soft); border: none; border-radius: 6px; width: 24px; height: 24px; cursor: pointer; font-weight: 800; font-size: 14px; color: var(--success); }
+        .cart-total { margin-top: 14px; font-size: 1.3rem; font-weight: 800; text-align: right; color: var(--text); border-top: 2px solid var(--border); padding-top: 12px; }
+        .cart-total span { color: var(--primary); }
+        .toast { position: fixed; right: 20px; bottom: 20px; background: #064e3b; color: #d1fae5; padding: 12px 16px; border-radius: 12px; font-weight: 700; font-size: 13px; opacity: 0; transform: translateY(20px); transition: all .25s ease; z-index: 100; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 1100px) { .metrics, .panel-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .pos-grid { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+        @media (max-width: 720px) { .content { padding: 14px; } .metrics, .panel-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="demo-banner">MODO DEMO - Datos de prueba</div>
+    <div class="demo-banner">🛒 MODO DEMO — SGS Sistema de Gestion para Supermercados | Datos de prueba · Paraguay PYG</div>
     <div class="layout">
         <aside class="sidebar">
-            <div class="brand">🏦 SIRS Banking Demo</div>
-            <p>Monitoreo de sucursales, montos aprobados y estados operativos para una red bancaria chilena.</p>
-            <a class="nav-chip active" href="#overview">Resumen Ejecutivo</a>
-            <a class="nav-chip" href="#performance">Rendimiento por sucursal</a>
-            <a class="nav-chip" href="#transactions">Transacciones</a>
-            <a class="nav-chip" href="../index.html#projects">Volver al portfolio</a>
-            <div class="sidebar-stats">
+            <div class="brand">🛒 SGS</div>
+            <div class="brand-sub">Sistema de Gestion de Supermercados</div>
+            <button class="nav-chip active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-chip" onclick="showTab('ventas')">🧾 Punto de Venta</button>
+            <button class="nav-chip" onclick="showTab('inventario')">📦 Inventario</button>
+            <button class="nav-chip" onclick="showTab('compras')">🚚 Compras</button>
+            <a class="nav-chip" href="../index.html#projects">← Volver al portfolio</a>
+            <div class="sidebar-info">
                 Modo actual
-                <strong id="sidebarMode">DEMO</strong>
-                <span id="lastSync">Sincronizado hace segundos</span>
+                <strong>DEMO</strong>
+                <span id="stime">--</span>
             </div>
         </aside>
+
         <main class="content">
-            <nav class="breadcrumb" aria-label="Breadcrumb">
+            <nav class="breadcrumb">
                 <a href="../index.html">Portfolio SIRS</a>
                 <span>/</span>
-                <a href="./index.html">Proyecto 1</a>
+                <a href="./index.html">Proyecto 1 — SGS</a>
                 <span>/</span>
                 <span>Demo</span>
             </nav>
 
-            <section class="hero" id="overview">
-                <div>
-                    <h1>Dashboard bancario de sucursales</h1>
-                    <p>Vista demo para comité operativo con métricas en tiempo real simulado, cartera diaria, volumen por sucursal y control de alertas sobre transacciones en CLP.</p>
-                </div>
-                <div class="hero-actions">
-                    <a class="btn btn-project" href="./index.html">Ver proyecto</a>
-                    <a class="btn btn-demo" href="./demo.html?mode=demo">Refrescar demo</a>
-                    <button class="btn btn-ghost" id="exportCsv">Exportar CSV</button>
-                </div>
-            </section>
-
-            <section class="metrics" aria-label="Métricas principales">
-                <article class="metric-card">
-                    <div class="metric-label">Transacciones del día</div>
-                    <div class="metric-value" data-counter="transactions">0</div>
-                    <div class="metric-foot">+4.6% vs ayer</div>
-                </article>
-                <article class="metric-card">
-                    <div class="metric-label">Monto procesado</div>
-                    <div class="metric-value" data-counter="amount">CLP 0</div>
-                    <div class="metric-foot">Liquidez estable por sucursal</div>
-                </article>
-                <article class="metric-card">
-                    <div class="metric-label">Sucursales sobre SLA</div>
-                    <div class="metric-value" data-counter="branches">0</div>
-                    <div class="metric-foot">Cobertura operativa nacional</div>
-                </article>
-                <article class="metric-card">
-                    <div class="metric-label">Alertas críticas</div>
-                    <div class="metric-value" data-counter="alerts">0</div>
-                    <div class="metric-foot">Incidencias bajo monitoreo</div>
-                </article>
-            </section>
-
-            <section class="panel-grid" id="performance">
-                <article class="panel">
-                    <h2>Volumen por sucursal</h2>
-                    <p>Montos procesados durante la jornada en millones de CLP.</p>
-                    <div id="bars"></div>
-                </article>
-                <article class="panel">
-                    <h2>Distribución de estados</h2>
-                    <p>Participación de transacciones aprobadas, en revisión y observadas.</p>
-                    <div class="donut"></div>
-                    <div class="legend" id="legend"></div>
-                </article>
-            </section>
-
-            <section class="panel" id="transactions">
-                <div class="toolbar">
+            <!-- DASHBOARD TAB -->
+            <div class="tab-content active" id="tab-dashboard">
+                <div class="hero">
                     <div>
-                        <h2>Transacciones monitoreadas</h2>
-                        <small id="liveLabel">Actualización automática cada 5 segundos</small>
+                        <h1>Dashboard — SGS</h1>
+                        <p>Panel ejecutivo del dia con KPIs de ventas, inventario y caja. Datos simulados en tiempo real.</p>
                     </div>
-                    <button class="btn btn-project" id="toggleMode">Modo DEMO activo</button>
+                    <div class="hero-actions">
+                        <a class="btn btn-ghost" href="./index.html">Ver proyecto</a>
+                        <button class="btn btn-primary" onclick="refreshDash()">Refrescar</button>
+                    </div>
                 </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Sucursal</th>
-                                <th>Ejecutivo</th>
-                                <th>Monto</th>
-                                <th>Canal</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
+
+                <div class="metrics">
+                    <article class="metric-card">
+                        <div class="metric-label">Ventas del dia</div>
+                        <div class="metric-value" id="kVentas">₲ 0</div>
+                        <div class="metric-foot" id="kVentasFoot">+0% vs ayer</div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-label">Transacciones</div>
+                        <div class="metric-value" id="kTx">0</div>
+                        <div class="metric-foot">Ventas registradas hoy</div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-label">Productos bajo stock</div>
+                        <div class="metric-value" id="kStock">0</div>
+                        <div class="metric-foot warn" id="kStockFoot">Requieren reabastecimiento</div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-label">Caja actual</div>
+                        <div class="metric-value" id="kCaja">₲ 0</div>
+                        <div class="metric-foot">Efectivo disponible</div>
+                    </article>
                 </div>
-            </section>
+
+                <div class="panel-grid">
+                    <article class="panel">
+                        <h2>Top 5 Productos mas vendidos hoy</h2>
+                        <p>Unidades vendidas durante la jornada.</p>
+                        <div id="topProductos"></div>
+                    </article>
+                    <article class="panel">
+                        <h2>Distribucion por categoria</h2>
+                        <p>Participacion en ventas del dia.</p>
+                        <div class="donut" id="donutEl" style="background: conic-gradient(#10b981 0 40%, #34d399 40% 65%, #6ee7b7 65% 80%, #a7f3d0 80% 100%);"></div>
+                        <div class="legend">
+                            <div class="legend-item"><span><span class="legend-swatch" style="background:#10b981"></span>Almacen</span><span>40%</span></div>
+                            <div class="legend-item"><span><span class="legend-swatch" style="background:#34d399"></span>Bebidas</span><span>25%</span></div>
+                            <div class="legend-item"><span><span class="legend-swatch" style="background:#6ee7b7"></span>Lacteos</span><span>15%</span></div>
+                            <div class="legend-item"><span><span class="legend-swatch" style="background:#a7f3d0"></span>Otros</span><span>20%</span></div>
+                        </div>
+                    </article>
+                </div>
+
+                <article class="panel">
+                    <div class="toolbar">
+                        <div>
+                            <h2 style="margin:0">Ultimas ventas</h2>
+                            <small>Actualizacion automatica cada 5 segundos</small>
+                        </div>
+                        <button class="btn btn-ghost" onclick="exportarCSV()">Exportar CSV</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>#</th><th>Hora</th><th>Productos</th><th>Total</th><th>Cajero</th><th>Estado</th></tr></thead>
+                            <tbody id="ventasTable"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <!-- VENTAS TAB -->
+            <div class="tab-content" id="tab-ventas">
+                <div class="hero" style="margin-bottom:16px">
+                    <div>
+                        <h1>Punto de Venta</h1>
+                        <p>Selecciona productos para agregar al carrito. Demo interactiva con datos simulados.</p>
+                    </div>
+                </div>
+                <div class="pos-grid">
+                    <article class="panel">
+                        <h2 style="margin-bottom:12px">Catalogo de Productos</h2>
+                        <div class="product-grid" id="catalogoGrid"></div>
+                    </article>
+                    <article class="panel cart">
+                        <div class="cart-title">🧾 Carrito</div>
+                        <div class="cart-items" id="cartItems"><p style="color:var(--muted);font-size:13px">Sin productos agregados.</p></div>
+                        <div class="cart-total">Total: <span id="cartTotal">₲ 0</span></div>
+                        <div style="display:flex;gap:8px;margin-top:12px">
+                            <button class="btn btn-ghost" style="flex:1" onclick="clearCart()">Cancelar</button>
+                            <button class="btn btn-primary" style="flex:2" onclick="cobrar()">Cobrar</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- INVENTARIO TAB -->
+            <div class="tab-content" id="tab-inventario">
+                <div class="hero" style="margin-bottom:16px">
+                    <div>
+                        <h1>Control de Inventario</h1>
+                        <p>Stock actual de productos. Los resaltados en amarillo/rojo requieren reabastecimiento.</p>
+                    </div>
+                </div>
+                <article class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Producto</th><th>Categoria</th><th>Stock</th><th>Min.</th><th>Proveedor</th><th>Precio Venta</th><th>Estado</th></tr></thead>
+                            <tbody id="invTable"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <!-- COMPRAS TAB -->
+            <div class="tab-content" id="tab-compras">
+                <div class="hero" style="margin-bottom:16px">
+                    <div>
+                        <h1>Ordenes de Compra</h1>
+                        <p>Historial de compras a proveedores. Gestion de reabastecimiento por proveedor.</p>
+                    </div>
+                </div>
+                <article class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>#</th><th>Fecha</th><th>Proveedor</th><th>Items</th><th>Total</th><th>Estado</th></tr></thead>
+                            <tbody id="comprasTable"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
         </main>
     </div>
+
     <div class="toast" id="toast"></div>
+
     <script>
-        const projectKey = 'sirs-proyecto1-mode';
-        const searchParams = new URLSearchParams(window.location.search);
-        const isDemoFromUrl = searchParams.get('mode') === 'demo';
-        if (isDemoFromUrl) {
-            localStorage.setItem(projectKey, 'demo');
+    // ---- DATOS SIMULADOS ----
+    const PRODUCTOS = [
+        { id:1, nombre:'Aceite Vegetal 1L', cat:'Almacen', stock:45, min:10, precio:16500, proveedor:'Distribuidora Central' },
+        { id:2, nombre:'Arroz Largo 1kg', cat:'Almacen', stock:8, min:15, precio:9500, proveedor:'Distribuidora Central' },
+        { id:3, nombre:'Azucar Blanca 1kg', cat:'Almacen', stock:30, min:10, precio:7500, proveedor:'Distribuidora Central' },
+        { id:4, nombre:'Leche Entera 1L', cat:'Lacteos', stock:4, min:20, precio:6500, proveedor:'Lacteos del Sur' },
+        { id:5, nombre:'Yogur Natural 200g', cat:'Lacteos', stock:22, min:10, precio:5500, proveedor:'Lacteos del Sur' },
+        { id:6, nombre:'Gaseosa Cola 2L', cat:'Bebidas', stock:60, min:12, precio:12000, proveedor:'Bebidas Paraguay' },
+        { id:7, nombre:'Agua Mineral 1.5L', cat:'Bebidas', stock:3, min:15, precio:4500, proveedor:'Bebidas Paraguay' },
+        { id:8, nombre:'Fideos Spaghetti 400g', cat:'Almacen', stock:50, min:10, precio:8500, proveedor:'Distribuidora Central' },
+        { id:9, nombre:'Manteca 200g', cat:'Lacteos', stock:18, min:8, precio:11000, proveedor:'Lacteos del Sur' },
+        { id:10, nombre:'Pan de Molde', cat:'Panaderia', stock:15, min:5, precio:14000, proveedor:'Panaderia Norte' },
+        { id:11, nombre:'Atun en Lata 170g', cat:'Almacen', stock:40, min:10, precio:13500, proveedor:'Distribuidora Central' },
+        { id:12, nombre:'Jugo Tang Sobre', cat:'Bebidas', stock:100, min:20, precio:2500, proveedor:'Bebidas Paraguay' }
+    ];
+
+    const ULTIMAS_VENTAS = [
+        { id:1042, hora:'08:14', prods:3, total:38500, cajero:'Maria G.', estado:'ok' },
+        { id:1041, hora:'08:07', prods:5, total:72000, cajero:'Juan R.', estado:'ok' },
+        { id:1040, hora:'07:55', prods:2, total:21000, cajero:'Maria G.', estado:'ok' },
+        { id:1039, hora:'07:43', prods:8, total:114500, cajero:'Carlos M.', estado:'ok' },
+        { id:1038, hora:'07:30', prods:1, total:16500, cajero:'Juan R.', estado:'ok' },
+    ];
+
+    const COMPRAS = [
+        { id:88, fecha:'30/03/2026', proveedor:'Distribuidora Central', items:12, total:850000, estado:'ok' },
+        { id:87, fecha:'28/03/2026', proveedor:'Bebidas Paraguay', items:8, total:540000, estado:'ok' },
+        { id:86, fecha:'27/03/2026', proveedor:'Lacteos del Sur', items:5, total:320000, estado:'ok' },
+        { id:85, fecha:'25/03/2026', proveedor:'Panaderia Norte', items:3, total:180000, estado:'ok' },
+        { id:84, fecha:'23/03/2026', proveedor:'Distribuidora Central', items:15, total:1120000, estado:'ok' },
+    ];
+
+    const pyg = v => '&#8370; ' + Number(v).toLocaleString('es-PY', {maximumFractionDigits:0});
+
+    // ---- TABS ----
+    function showTab(name) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-chip').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        document.querySelector('[onclick="showTab(\'' + name + '\')"]').classList.add('active');
+    }
+
+    // ---- DASHBOARD ----
+    const topProds = [
+        { nombre:'Aceite Vegetal 1L', uds:47, pct:92 },
+        { nombre:'Gaseosa Cola 2L', uds:38, pct:74 },
+        { nombre:'Arroz Largo 1kg', uds:33, pct:64 },
+        { nombre:'Leche Entera 1L', uds:28, pct:55 },
+        { nombre:'Agua Mineral 1.5L', uds:21, pct:41 },
+    ];
+
+    function refreshDash() {
+        const ventasHoy = 3480000 + Math.floor(Math.random()*200000);
+        const txHoy = 124 + Math.floor(Math.random()*10);
+        const stockBajo = PRODUCTOS.filter(p => p.stock < p.min).length;
+        const caja = 1500000 + ventasHoy;
+
+        animCount('kVentas', ventasHoy, true);
+        animCount('kTx', txHoy, false);
+        document.getElementById('kStock').textContent = stockBajo;
+        animCount('kCaja', caja, true);
+        document.getElementById('kVentasFoot').textContent = '+' + (4 + Math.floor(Math.random()*3)) + '% vs ayer';
+
+        const tp = document.getElementById('topProductos');
+        tp.innerHTML = topProds.map(p => `
+            <div class="bar-row">
+                <span>${p.nombre}</span>
+                <div class="bar-track"><div class="bar-fill" style="width:${p.pct + Math.floor(Math.random()*5)}%"></div></div>
+                <span>${p.uds + Math.floor(Math.random()*5)} uds</span>
+            </div>`).join('');
+
+        const vt = document.getElementById('ventasTable');
+        vt.innerHTML = ULTIMAS_VENTAS.map(v => `
+            <tr>
+                <td>#${v.id + Math.floor(Math.random()*3)}</td>
+                <td>${v.hora}</td>
+                <td>${v.prods} producto(s)</td>
+                <td>${pyg(v.total)}</td>
+                <td>${v.cajero}</td>
+                <td><span class="status ok">Completada</span></td>
+            </tr>`).join('');
+
+        document.getElementById('stime').textContent = new Date().toLocaleTimeString('es-PY');
+        showToast('Dashboard actualizado');
+    }
+
+    function animCount(id, target, isCurrency) {
+        const el = document.getElementById(id);
+        let cur = 0; const step = target / 30; let frame = 0;
+        const iv = setInterval(() => {
+            cur = Math.min(cur + step, target); frame++;
+            el.innerHTML = isCurrency ? pyg(Math.round(cur)) : Math.round(cur);
+            if (frame >= 30) clearInterval(iv);
+        }, 25);
+    }
+
+    // ---- POS / CARRITO ----
+    let cart = {};
+    function renderCatalogo() {
+        document.getElementById('catalogoGrid').innerHTML = PRODUCTOS.map(p => `
+            <div class="product-btn" onclick="addToCart(${p.id})">
+                <div>${p.nombre}</div>
+                <div class="product-price">${pyg(p.precio)}</div>
+            </div>`).join('');
+    }
+    function addToCart(id) {
+        cart[id] = (cart[id] || 0) + 1;
+        renderCart();
+        showToast('Producto agregado');
+    }
+    function removeFromCart(id) {
+        if (cart[id] > 1) cart[id]--;
+        else delete cart[id];
+        renderCart();
+    }
+    function renderCart() {
+        const items = Object.keys(cart);
+        if (!items.length) {
+            document.getElementById('cartItems').innerHTML = '<p style="color:var(--muted);font-size:13px">Sin productos agregados.</p>';
+            document.getElementById('cartTotal').innerHTML = pyg(0);
+            return;
         }
-        const isDemoMode = localStorage.getItem(projectKey) === 'demo' || isDemoFromUrl || window.location.pathname.endsWith('/demo.html');
-        document.getElementById('sidebarMode').textContent = isDemoMode ? 'DEMO' : 'LIVE';
+        let total = 0;
+        document.getElementById('cartItems').innerHTML = items.map(id => {
+            const p = PRODUCTOS.find(x => x.id == id);
+            const sub = p.precio * cart[id];
+            total += sub;
+            return `<div class="cart-row">
+                <strong>${p.nombre}</strong>
+                <div class="cart-qty">
+                    <button class="qty-btn" onclick="removeFromCart(${id})">-</button>
+                    <span>${cart[id]}</span>
+                    <button class="qty-btn" onclick="addToCart(${id})">+</button>
+                </div>
+                <span>${pyg(sub)}</span>
+            </div>`;
+        }).join('');
+        document.getElementById('cartTotal').innerHTML = pyg(total);
+    }
+    function clearCart() { cart = {}; renderCart(); }
+    function cobrar() {
+        const items = Object.keys(cart);
+        if (!items.length) { showToast('Agrega productos al carrito'); return; }
+        let total = 0;
+        items.forEach(id => { const p = PRODUCTOS.find(x => x.id == id); total += p.precio * cart[id]; });
+        showToast('Venta registrada: ' + pyg(total).replace('&#8370;','₲'));
+        clearCart();
+    }
 
-        let dashboardData = generateDummyData();
-        let refreshTick = 0;
+    // ---- INVENTARIO ----
+    function renderInventario() {
+        document.getElementById('invTable').innerHTML = PRODUCTOS.map(p => {
+            const ok = p.stock >= p.min;
+            const warn = p.stock < p.min && p.stock > 0;
+            const danger = p.stock === 0;
+            let cls = ok ? 'ok' : (warn ? 'warn' : 'danger');
+            let lbl = ok ? 'Normal' : (warn ? 'Stock bajo' : 'Sin stock');
+            return `<tr>
+                <td>${p.nombre}</td>
+                <td>${p.cat}</td>
+                <td><strong>${p.stock}</strong></td>
+                <td>${p.min}</td>
+                <td>${p.proveedor}</td>
+                <td>${pyg(p.precio)}</td>
+                <td><span class="status ${cls}">${lbl}</span></td>
+            </tr>`;
+        }).join('');
+    }
 
-        function generateDummyData() {
-            return {
-                metrics: {
-                    transactions: 1842,
-                    amount: 428600000,
-                    branches: 18,
-                    alerts: 7
-                },
-                bars: [
-                    { label: 'Providencia', value: 92 },
-                    { label: 'Las Condes', value: 84 },
-                    { label: 'Viña del Mar', value: 66 },
-                    { label: 'Concepción', value: 58 },
-                    { label: 'Antofagasta', value: 51 }
-                ],
-                statuses: [
-                    { label: 'Aprobadas', value: 62, color: '#16a34a' },
-                    { label: 'En revisión', value: 26, color: '#f59e0b' },
-                    { label: 'Observadas', value: 12, color: '#ef4444' }
-                ],
-                rows: [
-                    { date: '20/03/2026 09:12', branch: 'Providencia', executive: 'Camila Rojas', amount: 48500000, channel: 'Sucursal', status: 'Aprobada' },
-                    { date: '20/03/2026 09:18', branch: 'Las Condes', executive: 'Felipe Sepúlveda', amount: 71200000, channel: 'App Empresas', status: 'En revisión' },
-                    { date: '20/03/2026 09:27', branch: 'Viña del Mar', executive: 'Martina Fuentes', amount: 26300000, channel: 'Mesa Comercial', status: 'Aprobada' },
-                    { date: '20/03/2026 09:33', branch: 'Concepción', executive: 'Vicente Araya', amount: 19100000, channel: 'Sucursal', status: 'Observada' },
-                    { date: '20/03/2026 09:39', branch: 'Antofagasta', executive: 'Josefa Mella', amount: 53800000, channel: 'Banca Web', status: 'Aprobada' },
-                    { date: '20/03/2026 09:44', branch: 'Providencia', executive: 'Tomás Valdés', amount: 32400000, channel: 'Mesa Comercial', status: 'En revisión' }
-                ]
-            };
-        }
+    // ---- COMPRAS ----
+    function renderCompras() {
+        document.getElementById('comprasTable').innerHTML = COMPRAS.map(c => `
+            <tr>
+                <td>#${c.id}</td>
+                <td>${c.fecha}</td>
+                <td>${c.proveedor}</td>
+                <td>${c.items} items</td>
+                <td>${pyg(c.total)}</td>
+                <td><span class="status ok">Recibida</span></td>
+            </tr>`).join('');
+    }
 
-        function renderDashboard(data) {
-            animateMetric('transactions', data.metrics.transactions, value => value.toLocaleString('es-CL'));
-            animateMetric('amount', data.metrics.amount, value => formatCurrency(value, 'CLP'));
-            animateMetric('branches', data.metrics.branches, value => value.toString());
-            animateMetric('alerts', data.metrics.alerts, value => value.toString());
-            renderBars(data.bars);
-            renderLegend(data.statuses);
-            renderTable(data.rows);
-            document.getElementById('lastSync').textContent = 'Última simulación: ' + new Date().toLocaleTimeString('es-CL');
-        }
+    // ---- CSV ----
+    function exportarCSV() {
+        const rows = [['#','Hora','Productos','Total PYG','Cajero','Estado']];
+        ULTIMAS_VENTAS.forEach(v => rows.push([v.id, v.hora, v.prods, v.total, v.cajero, 'Completada']));
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        a.download = 'sgs_ventas_demo.csv';
+        a.click();
+        showToast('CSV exportado');
+    }
 
-        function animateMetric(key, endValue, formatter) {
-            const element = document.querySelector('[data-counter="' + key + '"]');
-            const startValue = Number(element.dataset.current || 0);
-            const duration = 800;
-            const startTime = performance.now();
+    // ---- TOAST ----
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
 
-            function frame(now) {
-                const progress = Math.min((now - startTime) / duration, 1);
-                const nextValue = Math.round(startValue + ((endValue - startValue) * progress));
-                element.textContent = formatter(nextValue);
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    element.dataset.current = String(endValue);
-                }
-            }
-
-            requestAnimationFrame(frame);
-        }
-
-        function renderBars(bars) {
-            const container = document.getElementById('bars');
-            container.innerHTML = bars.map(item => {
-                return '<div class="bar-row"><strong>' + item.label + '</strong><div class="bar-track"><div class="bar-fill" style="width:' + item.value + '%"></div></div><span>' + item.value + ' MM CLP</span></div>';
-            }).join('');
-        }
-
-        function renderLegend(statuses) {
-            const legend = document.getElementById('legend');
-            legend.innerHTML = statuses.map(item => {
-                return '<div class="legend-item"><span><span class="legend-swatch" style="background:' + item.color + '"></span>' + item.label + '</span><strong>' + item.value + '%</strong></div>';
-            }).join('');
-        }
-
-        function renderTable(rows) {
-            const body = document.getElementById('tableBody');
-            body.innerHTML = rows.map(row => {
-                const statusClass = row.status === 'Aprobada' ? 'ok' : row.status === 'En revisión' ? 'pending' : 'alert';
-                return '<tr><td>' + row.date + '</td><td>' + row.branch + '</td><td>' + row.executive + '</td><td>' + formatCurrency(row.amount, 'CLP') + '</td><td>' + row.channel + '</td><td><span class="status ' + statusClass + '">' + row.status + '</span></td></tr>';
-            }).join('');
-        }
-
-        function refreshData() {
-            refreshTick += 1;
-            dashboardData.metrics.transactions += 12 + refreshTick;
-            dashboardData.metrics.amount += 4200000 + (refreshTick * 800000);
-            dashboardData.metrics.alerts = Math.max(4, (dashboardData.metrics.alerts + (refreshTick % 2 === 0 ? -1 : 1)));
-            dashboardData.bars = dashboardData.bars.map((item, index) => ({
-                label: item.label,
-                value: Math.min(98, item.value + ((index % 2 === 0) ? 2 : -1))
-            }));
-            dashboardData.rows.unshift({
-                date: new Date().toLocaleString('es-CL', { hour12: false }),
-                branch: ['Providencia', 'Las Condes', 'Viña del Mar', 'Concepción'][refreshTick % 4],
-                executive: ['Ignacia Pino', 'Benjamín Castro', 'Florencia Jara', 'Matías Núñez'][refreshTick % 4],
-                amount: 18000000 + (refreshTick * 2100000),
-                channel: ['Sucursal', 'App Empresas', 'Mesa Comercial'][refreshTick % 3],
-                status: ['Aprobada', 'En revisión', 'Observada'][refreshTick % 3]
-            });
-            dashboardData.rows = dashboardData.rows.slice(0, 7);
-            renderDashboard(dashboardData);
-        }
-
-        function formatCurrency(value, currency) {
-            return new Intl.NumberFormat('es-CL', { style: 'currency', currency, maximumFractionDigits: 0 }).format(value);
-        }
-
-        function exportCsv() {
-            const headers = ['Fecha', 'Sucursal', 'Ejecutivo', 'Monto', 'Canal', 'Estado'];
-            const lines = dashboardData.rows.map(row => [row.date, row.branch, row.executive, row.amount, row.channel, row.status].join(','));
-            const csv = [headers.join(','), ...lines].join('\n');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'proyecto1-transacciones-demo.csv';
-            link.click();
-            URL.revokeObjectURL(link.href);
-            showToast('CSV demo exportado correctamente');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2200);
-        }
-
-        document.getElementById('exportCsv').addEventListener('click', exportCsv);
-        document.getElementById('toggleMode').addEventListener('click', () => showToast('El tablero permanece en modo demo local'));
-
-        renderDashboard(dashboardData);
-        setInterval(refreshData, 5000);
+    // ---- INIT ----
+    refreshDash();
+    renderCatalogo();
+    renderInventario();
+    renderCompras();
+    setInterval(refreshDash, 5000);
+    setInterval(() => { document.getElementById('stime').textContent = new Date().toLocaleTimeString('es-PY'); }, 1000);
     </script>
 </body>
 </html>
