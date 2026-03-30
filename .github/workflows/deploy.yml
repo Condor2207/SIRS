@@ -5,8 +5,7 @@ on:
     branches:
       - main
       - master
-      - copilot/add-online-access
-      - copilot/fix-github-pages-error
+      - copilot/*
   workflow_dispatch:
 
 permissions:
