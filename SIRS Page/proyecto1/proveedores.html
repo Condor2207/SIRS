@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock – Proveedores</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛒 SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">🌙 Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Gestión de Proveedores</h2>
+
+      <div class="card" style="margin-bottom:1.2rem;">
+        <h3 class="section-title">Agregar / Editar Proveedor</h3>
+        <form id="formProveedor" class="stack">
+          <input type="hidden" id="editId" />
+          <div class="form-row">
+            <label>Nombre
+              <input id="nombre" type="text" required placeholder="Distribuidora XYZ" />
+            </label>
+            <label>Contacto
+              <input id="contacto" type="text" placeholder="Sr. López" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Teléfono
+              <input id="telefono" type="text" placeholder="+1 555-0100" />
+            </label>
+            <label>Email
+              <input id="email" type="email" placeholder="proveedor@mail.com" />
+            </label>
+          </div>
+          <div style="display:flex; gap:0.6rem;">
+            <button class="btn primary" type="submit" id="submitBtn">Guardar Proveedor</button>
+            <button class="btn ghost" type="button" id="cancelEditBtn" style="display:none">Cancelar</button>
+          </div>
+        </form>
+        <p id="mensaje" class="message"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Listado de Proveedores</h3>
+        <div style="margin-bottom:0.6rem;">
+          <input type="search" id="searchTablaProveedores" placeholder="🔍 Buscar proveedor…" style="max-width:340px;" autocomplete="off" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Nombre</th><th>Contacto</th><th>Teléfono</th><th>Email</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="proveedoresBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/proveedores.js"></script>
+</body>
+</html>

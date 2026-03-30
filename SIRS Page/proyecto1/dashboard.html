@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock – Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛒 SuperStock Demo</h1>
+    <div class="actions">
+      <span class="user-badge" id="userBadge"></span>
+      <button class="btn ghost" id="themeToggle">🌙 Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1.2rem; font-size:1.4rem;">
+        Panel de Control
+        <span class="muted" style="font-size:0.9rem; font-weight:400; margin-left:0.5rem;" id="fechaHoy"></span>
+      </h2>
+
+      <div class="kpi-grid">
+        <a class="kpi-card green kpi-link" href="reportes.html?periodo=hoy" title="Ver reporte de ventas de hoy">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Ventas del Día</span>
+            <strong class="kpi-value">₲ <span id="kVentasDia">…</span></strong>
+          </div>
+        </a>
+        <a class="kpi-card emerald kpi-link" href="reportes.html?periodo=hoy" title="Ver reporte de ganancias de hoy">
+          <div class="kpi-icon">📈</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Ganancia del Día</span>
+            <strong class="kpi-value">₲ <span id="kGanancia">…</span></strong>
+          </div>
+        </a>
+        <a class="kpi-card slate kpi-link" href="reportes.html?periodo=hoy" title="Ver transacciones de hoy">
+          <div class="kpi-icon">🧾</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Transacciones</span>
+            <strong class="kpi-value"><span id="kNumVentas">…</span></strong>
+          </div>
+        </a>
+        <a class="kpi-card slate kpi-link" href="reportes.html?periodo=hoy&metodo=efectivo" title="Filtrar ventas en efectivo">
+          <div class="kpi-icon">💵</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Ticket Promedio</span>
+            <strong class="kpi-value">₲ <span id="kPromedio">…</span></strong>
+          </div>
+        </a>
+        <a class="kpi-card amber kpi-link" href="inventario.html" title="Ver productos con bajo stock">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Bajo Stock</span>
+            <strong class="kpi-value"><span id="kStockBajo">…</span> prods</strong>
+          </div>
+        </a>
+        <div class="kpi-card caja-off" id="kpiCaja">
+          <div class="kpi-icon">🏦</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Estado Caja</span>
+            <strong class="kpi-value" id="kCaja">…</strong>
+          </div>
+        </div>
+      </div>
+
+      <div id="alertasCaja"></div>
+
+      <div class="card">
+        <h3 class="section-title">📦 Inventario Actual</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th><th>Categoría</th><th>Stock</th>
+                <th>Mínimo</th><th>Estado</th><th>Precio Venta</th>
+              </tr>
+            </thead>
+            <tbody id="productosBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock - Inventario</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Control de Inventario</h2>
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;">
+          <h3 class="section-title" style="margin:0;">Alertas de Stock Bajo</h3>
+          <button class="btn primary" id="btnRestockMasivo" style="display:none;">
+            🛒 Crear Orden de Reabastecimiento
+          </button>
+        </div>
+        <div id="alertas" style="margin-top:.8rem;"></div>
+      </div>
+      <div class="card">
+        <h3 class="section-title">Todos los Productos</h3>
+        <div style="margin-bottom:0.6rem;">
+          <input type="search" id="searchInventario" placeholder="🔍 Buscar producto…" style="max-width:340px;" autocomplete="off" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Producto</th><th>Categoria</th><th>Stock</th><th>Minimo</th><th>Estado</th><th>Accion</th></tr></thead>
+            <tbody id="inventarioBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/inventario.js"></script>
+</body>
+</html>

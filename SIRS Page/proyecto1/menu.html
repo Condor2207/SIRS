@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SuperStock Demo | Menu Principal</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>SuperStock Demo</h1>
+    <div class="actions">
+      <span id="usuarioInfo" class="user-badge"></span>
+      <button id="themeToggle" class="btn ghost" type="button">Tema</button>
+      <button id="logoutBtn" class="btn danger" type="button">Salir</button>
+    </div>
+  </header>
+
+  <main class="container stack-lg">
+    <section class="welcome-card">
+      <h2>Bienvenido</h2>
+      <p id="welcomeMsg"></p>
+    </section>
+
+    <section>
+      <h3>Módulos Disponibles</h3>
+      <div class="modules-grid">
+        <a href="dashboard.html" class="module-card primary">
+          <h4>Dashboard</h4>
+          <p>Métricas y ganancias del día</p>
+        </a>
+        <a href="productos.html" class="module-card secondary">
+          <h4>Productos</h4>
+          <p>Gestión de inventario</p>
+        </a>
+        <a href="proveedores.html" class="module-card secondary">
+          <h4>Proveedores</h4>
+          <p>Administrar proveedores</p>
+        </a>
+        <a href="ventas.html" class="module-card accent">
+          <h4>Ventas (POS)</h4>
+          <p>Registrar venta y generar factura</p>
+        </a>
+        <a href="inventario.html" class="module-card neutral">
+          <h4>Inventario</h4>
+          <p>Stock y alertas de reabastecimiento</p>
+        </a>
+        <a href="caja.html" class="module-card neutral">
+          <h4>Caja</h4>
+          <p>Apertura/cierre de caja</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/menu.js"></script>
+</body>
+</html>

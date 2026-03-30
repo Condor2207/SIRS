@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock - Caja</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Control de Caja</h2>
+      <div id="cajaEstadoCard" class="card" style="margin-bottom:1.2rem;text-align:center;padding:2rem;">
+        <div style="font-size:3rem;" id="cajaEmoji">&#127982;</div>
+        <h3 id="cajaEstadoText" style="font-size:1.4rem;margin:0.5rem 0;">Cargando...</h3>
+        <p class="muted" id="cajaDetalle"></p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="card">
+          <h3 class="section-title">Apertura de Caja</h3>
+          <form id="formApertura" class="stack">
+            <label>Monto Inicial ($)
+              <input id="montoApertura" type="number" step="0.01" placeholder="0.00" required />
+            </label>
+            <button class="btn primary block" type="submit">Abrir Caja</button>
+          </form>
+          <p id="msgApertura" class="message"></p>
+        </div>
+        <div class="card">
+          <h3 class="section-title">Cierre de Caja</h3>
+          <form id="formCierre" class="stack">
+            <label>Monto Final Contado ($)
+              <input id="montoCierre" type="number" step="0.01" placeholder="0.00" required />
+            </label>
+            <button class="btn danger block" type="submit">Cerrar Caja</button>
+          </form>
+          <div id="resumenCierre" style="margin-top:1rem;"></div>
+          <p id="msgCierre" class="message"></p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/caja.js"></script>
+</body>
+</html>

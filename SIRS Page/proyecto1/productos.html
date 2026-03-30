@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock – Productos</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛒 SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">🌙 Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Gestión de Productos</h2>
+
+      <div class="card" style="margin-bottom:1.2rem;">
+        <h3 class="section-title">Agregar / Editar Producto</h3>
+        <form id="formProducto" class="stack">
+          <input type="hidden" id="editId" />
+          <div class="form-row">
+            <label>Nombre
+              <input id="nombre" type="text" required placeholder="Ej: Leche Entera" />
+            </label>
+            <label>Categoría
+              <input id="categoria" type="text" required placeholder="Ej: Lácteos" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Precio Venta ($)
+              <input id="precio_venta" type="number" step="0.01" required placeholder="0.00" />
+            </label>
+            <label>Costo ($)
+              <input id="costo" type="number" step="0.01" required placeholder="0.00" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Stock Actual
+              <input id="stock_actual" type="number" required placeholder="0" />
+            </label>
+            <label>Stock Mínimo
+              <input id="stock_minimo" type="number" required placeholder="10" />
+            </label>
+            <label>Proveedor
+              <select id="proveedor_id" required>
+                <option value="">-- Seleccionar --</option>
+              </select>
+            </label>
+          </div>
+          <div style="display:flex; gap:0.6rem;">
+            <button class="btn primary" type="submit" id="submitBtn">Crear Producto</button>
+            <button class="btn ghost" type="button" id="cancelEditBtn" style="display:none">Cancelar</button>
+          </div>
+        </form>
+        <p id="mensaje" class="message"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Listado de Productos</h3>
+        <div style="margin-bottom:0.6rem;">
+          <input type="search" id="searchTablaProductos" placeholder="🔍 Buscar producto…" style="max-width:340px;" autocomplete="off" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th><th>Categoría</th><th>Precio</th>
+                <th>Costo</th><th>Stock</th><th>Mínimo</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="productosBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/productos.js"></script>
+</body>
+</html>

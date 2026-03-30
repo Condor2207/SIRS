@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SuperStock Demo | Inicio</title>
+  <link rel="stylesheet" href="assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>SuperStock Demo</h1>
+    <div class="actions">
+      <button id="themeToggle" class="btn ghost" type="button" aria-label="Cambiar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container center-screen">
+    <section class="card login-card">
+      <h2>Ingreso al Sistema</h2>
+      <p class="muted">Gestión de ventas, inventario y reportes</p>
+      <form id="loginForm" class="stack">
+        <label>
+          Usuario
+          <input id="username" type="text" required placeholder="admin o vendedor" />
+        </label>
+        <label>
+          Contrasena
+          <input id="password" type="password" required placeholder="********" />
+        </label>
+        <button class="btn primary" type="submit">Ingresar</button>
+      </form>
+      <p id="message" class="message"></p>
+      <div class="hint-box">
+        <strong>Credenciales demo:</strong><br />
+        Admin: admin / admin123<br />
+        Vendedor: vendedor / 123456
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

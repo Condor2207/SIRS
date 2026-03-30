@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock - Reportes</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <style>
+    /* ---- Tabs ---- */
+    .rep-tabs { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:1.2rem; }
+    .rep-tab { padding:.7rem 1.6rem; font-size:.95rem; font-weight:600; border:none; background:none;
+               color:var(--text-muted); cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:.15s; }
+    .rep-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+    .rep-tab-panel { display:none; }
+    .rep-tab-panel.active { display:block; }
+
+    /* ---- Method filter chips ---- */
+    .method-filters { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .chip { padding:.35rem 1rem; border-radius:999px; border:2px solid var(--border);
+            background:var(--surface); color:var(--text); cursor:pointer; font-size:.82rem;
+            font-weight:600; transition:.15s; }
+    .chip:hover { border-color:var(--primary); color:var(--primary); }
+    .chip.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+    .chip.chip-efectivo.active   { background:#10B981; border-color:#10B981; }
+    .chip.chip-tarjeta.active    { background:#3B82F6; border-color:#3B82F6; }
+    .chip.chip-transf.active     { background:#8B5CF6; border-color:#8B5CF6; }
+
+    /* ---- KPI summary bar ---- */
+    .rep-kpi-bar { display:flex; gap:.8rem; flex-wrap:wrap; margin-bottom:1.2rem; }
+    .rep-kpi { border-radius:12px; padding:.9rem 1.2rem; display:flex; flex-direction:column;
+               gap:.15rem; min-width:140px; cursor:pointer; transition:.2s;
+               border:2px solid transparent; }
+    .rep-kpi:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+    .rep-kpi.active { border-color:rgba(255,255,255,.6); box-shadow:var(--shadow-lg); }
+    .rep-kpi.total  { background:linear-gradient(135deg,#10B981,#059669); color:#fff; }
+    .rep-kpi.txns   { background:linear-gradient(135deg,#475569,#334155); color:#fff; }
+    .rep-kpi.ef     { background:linear-gradient(135deg,#059669,#047857); color:#fff; }
+    .rep-kpi.tc     { background:linear-gradient(135deg,#3B82F6,#2563EB); color:#fff; }
+    .rep-kpi.tr     { background:linear-gradient(135deg,#8B5CF6,#7C3AED); color:#fff; }
+    .rep-kpi-label  { font-size:.75rem; font-weight:600; opacity:.9; }
+    .rep-kpi-value  { font-size:1.35rem; font-weight:800; }
+
+    /* ---- Grouped table badge ---- */
+    .badge-ef   { background:#dcfce7; color:#166534; padding:.2rem .6rem; border-radius:999px; font-size:.78rem; font-weight:700; }
+    .badge-tc   { background:#dbeafe; color:#1e40af; padding:.2rem .6rem; border-radius:999px; font-size:.78rem; font-weight:700; }
+    .badge-tr   { background:#ede9fe; color:#5b21b6; padding:.2rem .6rem; border-radius:999px; font-size:.78rem; font-weight:700; }
+    [data-theme="dark"] .badge-ef { background:#14532d; color:#bbf7d0; }
+    [data-theme="dark"] .badge-tc { background:#1e3a5f; color:#bfdbfe; }
+    [data-theme="dark"] .badge-tr { background:#2e1065; color:#ddd6fe; }
+
+    /* ---- Provider bar chart ---- */
+    .prov-bar-row { display:flex; align-items:center; gap:.7rem; padding:.35rem 0; font-size:.85rem; }
+    .prov-bar-name { width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+    .prov-bar-track { flex:1; background:var(--border); border-radius:4px; height:10px; overflow:hidden; }
+    .prov-bar-fill  { height:100%; background:var(--primary); border-radius:4px; transition:width .4s ease; }
+    .prov-bar-val   { width:90px; text-align:right; font-weight:700; flex-shrink:0; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛒 SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">🌙 Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Reportes y Estadísticas</h2>
+
+      <!-- ===== Period picker ===== -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+          <button class="btn primary periodo-btn" data-periodo="hoy">Hoy</button>
+          <button class="btn ghost periodo-btn" data-periodo="semana">Esta Semana</button>
+          <button class="btn ghost periodo-btn" data-periodo="mes">Este Mes</button>
+          <button class="btn ghost periodo-btn" data-periodo="rango">Rango de Fechas</button>
+          <div id="rangoInputs" style="display:none;gap:.5rem;align-items:center;" class="form-row">
+            <label style="flex:none;">Desde <input type="date" id="desdeInput" /></label>
+            <label style="flex:none;">Hasta <input type="date" id="hastaInput" /></label>
+            <button class="btn accent" id="aplicarRangoBtn">Aplicar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Tabs ===== -->
+      <div class="rep-tabs">
+        <button class="rep-tab active" data-tab="ventas">📊 Ventas</button>
+        <button class="rep-tab" data-tab="compras" id="tabComprasBtn">🛒 Compras</button>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- TAB: VENTAS                                            -->
+      <!-- ===================================================== -->
+      <div class="rep-tab-panel active" id="panel-ventas">
+
+        <!-- KPI summary (clickable = preset method filter) -->
+        <div class="rep-kpi-bar">
+          <div class="rep-kpi total active" id="kpiTodos" data-metodo="">
+            <span class="rep-kpi-label">💰 Total Ventas</span>
+            <span class="rep-kpi-value">₲ <span id="rTotalVentas">0</span></span>
+          </div>
+          <div class="rep-kpi txns" id="kpiTxns" data-metodo="">
+            <span class="rep-kpi-label">🧾 Transacciones</span>
+            <span class="rep-kpi-value"><span id="rNumVentas">0</span></span>
+          </div>
+          <div class="rep-kpi ef" id="kpiEfectivo" data-metodo="efectivo">
+            <span class="rep-kpi-label">💵 Efectivo</span>
+            <span class="rep-kpi-value">₲ <span id="rEfectivo">0</span></span>
+          </div>
+          <div class="rep-kpi tc" id="kpiTarjeta" data-metodo="tarjeta_credito">
+            <span class="rep-kpi-label">💳 Tarjeta</span>
+            <span class="rep-kpi-value">₲ <span id="rTarjeta">0</span></span>
+          </div>
+          <div class="rep-kpi tr" id="kpiTransf" data-metodo="transferencia">
+            <span class="rep-kpi-label">🏦 Transferencia</span>
+            <span class="rep-kpi-value">₲ <span id="rTransf">0</span></span>
+          </div>
+        </div>
+
+        <!-- Search + method chip filters -->
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:.8rem;">
+          <input type="search" id="searchVentasRep" placeholder="Buscar producto…"
+                 style="flex:1;min-width:200px;max-width:320px;" />
+          <div class="method-filters">
+            <button class="chip active" data-m="">Todos</button>
+            <button class="chip chip-efectivo" data-m="efectivo">💵 Efectivo</button>
+            <button class="chip chip-tarjeta" data-m="tarjeta_credito">💳 Tarjeta</button>
+            <button class="chip chip-transf" data-m="transferencia">🏦 Transferencia</button>
+          </div>
+          <button class="btn ghost" id="exportVentasExcel">⬇ Excel</button>
+          <button class="btn ghost" id="exportVentasPdf">⬇ PDF</button>
+        </div>
+
+        <!-- Ventas grouped table -->
+        <div class="card">
+          <div class="table-wrap">
+            <table id="tablaVentas">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Producto</th>
+                  <th>Método de Pago</th>
+                  <th style="text-align:right;">Cantidad</th>
+                  <th style="text-align:right;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="ventasBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- TAB: COMPRAS (admin only)                             -->
+      <!-- ===================================================== -->
+      <div class="rep-tab-panel" id="panel-compras">
+
+        <!-- Compras KPI bar -->
+        <div class="rep-kpi-bar" style="margin-bottom:1.2rem;">
+          <div class="rep-kpi total">
+            <span class="rep-kpi-label">🛒 Total Compras</span>
+            <span class="rep-kpi-value">₲ <span id="rTotalCompras">0</span></span>
+          </div>
+          <div class="rep-kpi txns">
+            <span class="rep-kpi-label">📦 Órdenes</span>
+            <span class="rep-kpi-value"><span id="rNumCompras">0</span></span>
+          </div>
+        </div>
+
+        <!-- Proveedor filter + search -->
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:.8rem;">
+          <input type="search" id="searchComprasRep" placeholder="Buscar producto o proveedor…"
+                 style="flex:1;min-width:200px;max-width:320px;" />
+          <select id="filtroProveedor" style="min-width:180px;">
+            <option value="">Todos los proveedores</option>
+          </select>
+          <button class="btn accent" id="aplicarFilProveedor">Filtrar</button>
+          <button class="btn ghost" id="exportComprasExcel">⬇ Excel</button>
+          <button class="btn ghost" id="exportComprasPdf">⬇ PDF</button>
+        </div>
+
+        <!-- Bar chart por proveedor -->
+        <div class="card" style="margin-bottom:1.2rem;">
+          <h3 class="section-title">Gasto por Proveedor</h3>
+          <div id="proveedorChart"></div>
+        </div>
+
+        <!-- Compras grouped table -->
+        <div class="card">
+          <div class="table-wrap">
+            <table id="tablaCompras">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Proveedor</th>
+                  <th>Producto</th>
+                  <th style="text-align:right;">Cantidad</th>
+                  <th style="text-align:right;">Precio Prom.</th>
+                  <th style="text-align:right;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="comprasBodyRep"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/reportes.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock - Compras</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <style>
+    /* ── Restock order panel ── */
+    #restockPanel { display:none; }
+    .restock-group { border:2px solid var(--primary); border-radius:14px; padding:1rem 1.2rem; margin-bottom:1rem; }
+    .restock-group-header { display:flex; align-items:center; justify-content:space-between;
+                            margin-bottom:.8rem; font-weight:700; font-size:1rem; color:var(--primary); }
+    .restock-item { display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:.6rem;
+                    align-items:center; padding:.45rem 0; border-bottom:1px solid var(--border); font-size:.9rem; }
+    .restock-item:last-child { border-bottom:none; }
+    .restock-item-label { font-size:.72rem; color:var(--text-muted); font-weight:600; }
+    .restock-item input { width:100%; }
+    .restock-item .prod-name { font-weight:600; }
+    .restock-item .stock-info { font-size:.8rem; color:var(--text-muted); }
+    .restock-summary { display:flex; align-items:center; justify-content:space-between;
+                       flex-wrap:wrap; gap:.8rem; margin-top:1.2rem; padding-top:1rem;
+                       border-top:2px solid var(--border); }
+    .badge-restock { background:var(--primary); color:#fff; border-radius:999px;
+                     padding:.25rem .8rem; font-size:.8rem; font-weight:700; margin-left:.4rem; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Módulo de Compras</h2>
+
+      <!-- ══════════════════════════════════════════════════ -->
+      <!-- PANEL: ORDEN DE REABASTECIMIENTO (aparece solo    -->
+      <!--        cuando viene desde Inventario)             -->
+      <!-- ══════════════════════════════════════════════════ -->
+      <div id="restockPanel" class="card" style="margin-bottom:1.4rem; border:2px solid var(--primary);">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem;">
+          <h3 class="section-title" style="margin:0;">
+            🛒 Orden de Reabastecimiento
+            <span id="restockBadge" class="badge-restock"></span>
+          </h3>
+          <button class="btn ghost tiny" id="cancelRestockBtn">✕ Cancelar y limpiar</button>
+        </div>
+        <p class="muted" style="margin-bottom:1rem;font-size:.88rem;">
+          Revisa cantidades y precios sugeridos (promedio 2 meses). Puedes editar antes de confirmar.
+          Se creará <strong>una orden por proveedor</strong>.
+        </p>
+
+        <!-- Groups injected here by JS -->
+        <div id="restockGroups"></div>
+
+        <div class="restock-summary">
+          <div>
+            <strong>Total estimado:</strong>
+            <span style="font-size:1.3rem;font-weight:800;color:var(--primary);">₲ <span id="restockTotal">0</span></span>
+          </div>
+          <button class="btn primary" id="confirmarRestockBtn" style="font-size:1rem;padding:.65rem 1.8rem;">
+            ✅ Confirmar y Generar Compra(s)
+          </button>
+        </div>
+        <p id="msgRestock" class="message"></p>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════ -->
+      <!-- PANEL: COMPRA MANUAL (siempre visible)            -->
+      <!-- ══════════════════════════════════════════════════ -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <h3 class="section-title">Nueva Compra Manual</h3>
+        <div class="form-row" style="margin-bottom:1rem;">
+          <label>Proveedor
+            <input type="search" id="searchProveedor" placeholder="🔍 Buscar proveedor…" autocomplete="off" />
+            <select id="proveedorSelect">
+              <option value="">-- Seleccionar proveedor --</option>
+            </select>
+          </label>
+        </div>
+        <div id="itemsContainer"></div>
+        <div style="display:flex;gap:0.6rem;margin-top:0.8rem;">
+          <button class="btn ghost" type="button" id="addItemBtn">+ Agregar Producto</button>
+        </div>
+        <div class="sale-footer" style="margin-top:1rem;">
+          <strong>Total: ₲ <span id="totalCompra">0</span></strong>
+          <button class="btn primary" id="submitCompraBtn" type="button">Registrar Compra</button>
+        </div>
+        <p id="msgCompra" class="message"></p>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════ -->
+      <!-- HISTORIAL                                         -->
+      <!-- ══════════════════════════════════════════════════ -->
+      <div class="card">
+        <h3 class="section-title">Historial de Compras</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Proveedor</th><th>Fecha</th><th>Total</th><th>Estado</th></tr>
+            </thead>
+            <tbody id="comprasBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/compras.js"></script>
+</body>
+</html>

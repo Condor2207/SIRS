@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperStock – Ventas POS</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛒 SuperStock Demo</h1>
+    <div class="actions">
+      <button class="btn ghost" id="themeToggle">🌙 Tema</button>
+      <button class="btn danger" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main class="main-content">
+      <h2 style="margin-bottom:1rem;">Ventas – Sistema POS</h2>
+
+      <div id="cajaCerradaAlert" style="display:none" class="alert error" style="margin-bottom:1rem;">
+        <strong>🔒 Caja cerrada</strong> — Debes abrir la caja antes de registrar ventas.
+        <a href="caja.html" style="margin-left:0.5rem; font-weight:700;">Ir a Caja →</a>
+      </div>
+
+      <div id="posPanel">
+        <div style="display:grid; grid-template-columns:1fr 380px; gap:1.2rem; align-items:start;">
+          <!-- Left: product selector -->
+          <div class="card">
+            <h3 class="section-title">Agregar Producto</h3>
+            <div class="form-row">
+              <label>Producto
+                <input type="search" id="searchProducto" placeholder="🔍 Buscar producto…" autocomplete="off" />
+                <select id="productoSelect"></select>
+              </label>
+              <label>Cantidad
+                <input id="cantidadInput" type="number" min="1" value="1" />
+              </label>
+            </div>
+            <div style="margin-top:0.8rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+              <button id="agregarItemBtn" class="btn secondary" type="button">➕ Agregar al carrito</button>
+              <span id="stockInfo" class="muted"></span>
+            </div>
+          </div>
+
+          <!-- Right: cart + checkout -->
+          <div class="card">
+            <h3 class="section-title">Carrito</h3>
+            <div id="cart" class="cart-list"></div>
+            <div style="margin-top:0.8rem;">
+              <label>Método de Pago
+                <select id="metodoSelect">
+                  <option value="efectivo">Efectivo</option>
+                  <option value="tarjeta">Tarjeta</option>
+                  <option value="cheque">Cheque</option>
+                  <option value="transferencia">Transferencia</option>
+                </select>
+              </label>
+            </div>
+            <div class="sale-footer">
+              <strong>Total: ₲ <span id="totalVenta">0</span></strong>
+              <button id="guardarVentaBtn" class="btn primary" type="button" disabled>Procesar Venta</button>
+            </div>
+            <p id="saleMessage" class="message"></p>
+          </div>
+        </div>
+
+        <!-- Invoice -->
+        <div class="card" style="margin-top:1.2rem;" id="invoiceSection" style="display:none">
+          <h3 class="section-title">🧾 Última Factura</h3>
+          <div id="invoiceContainer"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/sidebar.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/ventas.js"></script>
+</body>
+</html>

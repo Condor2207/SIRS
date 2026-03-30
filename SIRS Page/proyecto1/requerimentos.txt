@@ -1,0 +1,196 @@
+Titulo del Proyecto: SuperStock Demo - Sistema de Gestion para Supermercado (2 usuarios)
+
+Descripcion General:
+Sistema web completo para un supermercado pequeno con 2 personas (admin y vendedor). Gestiona stock, compras a proveedores, ventas y reportes. Incluye login con roles: Admin (acceso total), Vendedor (solo ventas y reportes propios).
+Entorno de demo con datos precargados: 2 usuarios, 2 proveedores, 10 productos de prueba.
+Stack definido para facilitar mantenimiento y estilos: Backend Python + PostgreSQL, Frontend HTML/CSS + JavaScript.
+
+Requerimientos Funcionales
+
+Modulos Principales:
+
+Autenticacion: Login con usuario/contrasena. Roles: Admin (todo), Vendedor (ventas + reportes propios). Sesion JWT.
+
+Dashboard: Metricas (ventas del dia, stock bajo, compras pendientes). Graficos de ventas por mes.
+
+Productos: CRUD completo. Campos: id, nombre, categoria, precio_venta, costo, stock_actual, stock_minimo, proveedor_id, fecha_caducidad (opcional). Alertas de stock bajo.
+
+Proveedores: CRUD. Campos: id, nombre, contacto, email, telefono, direccion.
+
+Compras: Registrar compras. Genera entrada de stock y actualiza inventario. Soporte de factura de proveedor.
+
+Ventas (POS): Buscar/agregar productos, calcular total, aplicar descuentos, generar ticket. Actualiza stock en tiempo real. Soporte de ventas rapidas.
+
+Reportes:
+
+Ventas por fecha/rango (admin ve todas, vendedor ve solo las suyas).
+
+Stock actual / stock bajo / productos caducados.
+
+Compras por proveedor.
+
+Ganancias (ventas - costos). Exportacion PDF/Excel.
+
+Roles y Permisos:
+
+Rol  Productos  Proveedores  Compras  Ventas  Reportes
+Admin  CRUD  CRUD  CRUD  CRUD  Todos
+Vendedor  Consulta  Consulta  No  CRUD  Solo propios
+
+Base de Datos - Esquema PostgreSQL (SQL de creacion incluida en demo)
+
+Tablas Principales:
+
+sql
+-- Tipo de rol
+CREATE TYPE rol_usuario AS ENUM ('admin', 'vendedor');
+
+-- Usuarios
+CREATE TABLE usuarios (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL, -- hashed
+  rol rol_usuario NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Proveedores
+CREATE TABLE proveedores (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  contacto VARCHAR(100),
+  email VARCHAR(100),
+  telefono VARCHAR(20),
+  direccion VARCHAR(255)
+);
+
+-- Productos
+CREATE TABLE productos (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  categoria VARCHAR(50),
+  precio_venta DECIMAL(10,2) NOT NULL,
+  costo DECIMAL(10,2) NOT NULL,
+  stock_actual INT DEFAULT 0,
+  stock_minimo INT DEFAULT 10,
+  proveedor_id INT REFERENCES proveedores(id),
+  fecha_caducidad DATE
+);
+
+-- Ventas
+CREATE TABLE ventas (
+  id SERIAL PRIMARY KEY,
+  usuario_id INT REFERENCES usuarios(id),
+  fecha TIMESTAMP DEFAULT NOW(),
+  total DECIMAL(10,2) NOT NULL
+);
+
+-- Detalle de ventas
+CREATE TABLE detalle_ventas (
+  id SERIAL PRIMARY KEY,
+  venta_id INT REFERENCES ventas(id),
+  producto_id INT REFERENCES productos(id),
+  cantidad INT NOT NULL,
+  precio_unitario DECIMAL(10,2) NOT NULL
+);
+
+-- Compras (similar a ventas, pero para entrada de stock)
+CREATE TABLE compras (...); -- Estructura similar
+
+Datos de Prueba Precargados (INSERT ejecutados en setup):
+
+Usuarios:
+Admin: username='admin', password='admin123' (rol=admin)
+Vendedor: username='vendedor', password='123456' (rol=vendedor)
+
+Proveedores:
+ID1: "Mayorista Frutas SA", contacto="Juan Perez", email="juan@frutas.com", tel="098765432"
+ID2: "Distribuidora Bebidas SRL", contacto="Maria Gomez", email="maria@bebidas.com", tel="098764321"
+
+Productos (10 ejemplos):
+Leche Entera (cat=Dairy, precio=2.50, costo=1.80, stock=50, min=10, prov=1, cad=2026-06-01)
+Pan Lactal (cat=Bakery, 1.20, 0.80, 30, 5, prov=1)
+Coca Cola 2L (cat=Drinks, 3.00, 2.00, 20, 5, prov=2, cad=2026-12-01)
+Arroz 1kg (cat=Grains, 1.80, 1.20, 100, 20, prov=1)
+Jabon Dove (cat=Hygiene, 2.20, 1.50, 40, 10, prov=2)
+6-10: Similar (huevos, aceite, fideos, yerba, galletitas).
+
+Tecnologias y Arquitectura:
+
+Backend: Python + FastAPI + SQLAlchemy + Alembic + JWT + passlib/bcrypt.
+
+Frontend: HTML5 + CSS3 + JavaScript (vanilla) + Fetch API + Chart.js para graficos.
+
+DB: PostgreSQL (Docker para demo).
+
+Estructura de Carpetas:
+
+text
+superstock-demo/
+├── backend/
+│   ├── app/
+│   │   ├── models/ (usuario.py, producto.py, etc.)
+│   │   ├── routes/ (auth.py, productos.py, ventas.py)
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── core/ (config, seguridad)
+│   │   └── main.py
+│   ├── migrations/ (alembic)
+│   ├── requirements.txt
+│   └── .env.example
+├── frontend/
+│   ├── index.html
+│   ├── pages/ (dashboard.html, productos.html, pos.html, reportes.html)
+│   ├── assets/
+│   │   ├── css/ (base.css, dashboard.css, pos.css)
+│   │   ├── js/ (api.js, auth.js, dashboard.js, pos.js)
+│   │   └── img/
+├── docker-compose.yml (Postgres + Backend)
+├── README.md (instrucciones setup)
+
+Despliegue: Docker Compose para entorno local. Frontend servido como archivos estaticos (Nginx o servidor estatico simple) consumiendo API Python.
+
+Flujos Clave:
+
+Login -> Dashboard segun rol.
+
+Venta: Buscar producto -> Agregar carrito -> Total -> Guardar (actualiza stock).
+
+Compra: Seleccionar proveedor/producto -> Cantidad -> Entrada de stock.
+
+Reporte: Filtros por fecha -> Tabla/grafico -> Exportar.
+
+Instrucciones Setup Demo (copiar a README.txt):
+
+1) docker-compose up -d (inicia PostgreSQL).
+
+2) Backend:
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+alembic upgrade head
+python -m app.seed_data
+uvicorn app.main:app --reload --port 8000
+
+3) Frontend:
+cd frontend
+python -m http.server 3000
+
+4) Acceso:
+Frontend: http://localhost:3000
+API docs: http://localhost:8000/docs
+Login con datos de prueba.
+
+Pruebas funcionales:
+Admin crea compra -> Vendedor realiza venta -> Revisar reportes.
+
+Proximos Pasos Desarrollo:
+
+Semana 1: Backend Python + Auth + DB + precarga.
+
+Semana 2: Frontend HTML/CSS/JS + POS.
+
+Semana 3: Reportes + permisos por rol + exportaciones.
+
+Deploy sugerido: Frontend estatico en Netlify/Vercel y backend Python en Render/Railway. Escalable a 100+ usuarios.
