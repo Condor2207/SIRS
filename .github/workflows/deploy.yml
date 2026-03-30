@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-      - copilot/add-online-access
+      - copilot/*
   workflow_dispatch:
 
 permissions:
